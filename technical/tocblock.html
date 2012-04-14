@@ -18,7 +18,7 @@
       <tr>
         <td class="toolbar"><div class="toolbar"><a class="toolbar" accesskey="1" href="../index.html">Home</a></div></td>
         <td class="toolbar"><div class="toolbar"><a class="toolbar" accesskey="2" href="../overview/index.html">Overview</a></div></td>
-	<td class="toolbar"><a class="toolbar" accesskey="3" href="../technical/index.html">Technical</a></td>
+		<td class="toolbar"><a class="toolbar" accesskey="3" href="../technical/index.html">Technical</a></td>
       </tr>
     </table>
 
@@ -30,18 +30,18 @@
     <h2>Introduction</h2>
 
     <p>
-    The TOCBLOCK is 512 bytes long.  There are four identical copies of this
-    information.  There are two contiguous pairs, one at the beginning of the
-    database and one near the end.
+    The TOCBLOCK is 512 bytes long.  There are two identical copies of this
+    information (each has an adjacent previous copy).  One of the two contiguous pair is located at (Private Region Start LBA + 1)
+	and the other is located at (Private Region Start LBA + Size LBA - 3).
     </p>
 
     <p>
     The sizes are in sectors and the <q>starts</q> are relative to the start of
-    the database.
+    the private region.
     </p>
 
     <p>
-    At the moment there are two bitmaps, <q>config</q> and <q>log</q>.
+    At the moment there are two regions, <q>config</q> and <q>log</q>.
     </p>
 
     <h2>Layout</h2>
@@ -60,17 +60,12 @@
       <tr>
         <td class="numeric">0x08</td>
         <td class="numeric">4</td>
-        <td>Sequence number</td>
+        <td>Checksum (a)</td>
       </tr>
       <tr>
         <td class="numeric">0x0C</td>
-        <td class="numeric">4</td>
-        <td>Zeros</td>
-      </tr>
-      <tr>
-        <td class="numeric">0x10</td>
-        <td class="numeric">4</td>
-        <td>Sequence Number</td>
+        <td class="numeric">8</td>
+        <td>Update Sequence Number (b)</td>
       </tr>
       <tr>
         <td class="numeric">0x14</td>
@@ -79,59 +74,102 @@
       </tr>
       <tr>
         <td class="numeric">0x24</td>
-        <td class="numeric">8</td>
-        <td>Bitmap Name</td>
+        <td class="numeric">34</td>
+        <td>TOC Region 0</td>
       </tr>
-      <tr>
-        <td class="numeric">0x2C</td>
-        <td class="numeric">2</td>
-        <td>Bitmap Flags?</td>
-      </tr>
-      <tr>
-        <td class="numeric">0x2E</td>
-        <td class="numeric">8</td>
-        <td>Bitmap Start</td>
-      </tr>
-      <tr>
-        <td class="numeric">0x36</td>
-        <td class="numeric">8</td>
-        <td>Bitmap Size</td>
-      </tr>
-      <tr>
-        <td class="numeric">0x3E</td>
-        <td class="numeric">8</td>
-        <td>Bitmap Flags?</td>
-      </tr>
-      <tr>
+	  <tr>
         <td class="numeric">0x46</td>
-        <td class="numeric">8</td>
-        <td>Bitmap Name</td>
+        <td class="numeric">34</td>
+        <td>TOC Region 1</td>
       </tr>
-      <tr>
-        <td class="numeric">0x4E</td>
-        <td class="numeric">2</td>
-        <td>Bitmap Flags?</td>
-      </tr>
-      <tr>
-        <td class="numeric">0x50</td>
-        <td class="numeric">8</td>
-        <td>Bitmap Start</td>
-      </tr>
-      <tr>
-        <td class="numeric">0x58</td>
-        <td class="numeric">8</td>
-        <td>Bitmap Size</td>
-      </tr>
-      <tr>
-        <td class="numeric">0x60</td>
-        <td class="numeric">8</td>
-        <td>Bitmap Flags?</td>
+	  <tr>
+        <td class="numeric">0x68</td>
+        <td class="numeric">34</td>
+        <td>...</td>
       </tr>
     </table>
+	
+	<h2>TOC Region Layout</h2>
+	
+	<table summary="" cellspacing="0">
+		<tr>
+        <th class="numeric">Offset</th>
+        <th class="numeric">Size</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <td class="numeric">0x00</td>
+        <td class="numeric">8</td>
+        <td>Region Name</td>
+      </tr>
+      <tr>
+        <td class="numeric">0x08</td>
+        <td class="numeric">2</td>
+        <td>Region Flags (see below)</td>
+      </tr>
+      <tr>
+        <td class="numeric">0x0A</td>
+        <td class="numeric">8</td>
+        <td>Region Start LBA (relative to Private Region Start)</td>
+      </tr>
+      <tr>
+        <td class="numeric">0x12</td>
+        <td class="numeric">8</td>
+        <td>Region Size LBA</td>
+      </tr>
+	  <tr>
+        <td class="numeric">0x1A</td>
+        <td class="numeric">2</td>
+        <td><div class="xxx">Unknown (always 00 06)</div></td>
+      </tr>
+      <tr>
+        <td class="numeric">0x1C</td>
+        <td class="numeric">2</td>
+        <td>Copy Number (always 00 01)</td>
+      </tr>
+	  <tr>
+        <td class="numeric">0x1E</td>
+        <td class="numeric">4</td>
+        <td>Zeros</td>
+      </tr>
+    </table>
+	
+	<h4>Region Flags:</h4>
+	
+	<table summary="" cellspacing="0">
+      <tr>
+		<th>Flag</th>
+		<th>Description</th>
+      </tr>
+      <tr>
+		<td>0x01</td>
+		<td>not exist</td>
+      </tr>
+	  <tr>
+		<td>0x02</td>
+		<td>new</td>
+      </tr>
+	  <tr>
+		<td>0x04</td>
+		<td>delete</td>
+      </tr>
+	  <tr>
+		<td>0x08</td>
+		<td>disabled</td>
+      </tr>
+    </table>
+	
+	<h2>Notes</h2>
 
+	<p>
+	(a) Sum of all the bytes in the sector excluding the 4 bytes of the checksum field<br>
+    (b) The most recent TOCBlock has this value in sync with the Private Header's Update Sequence Number.<br>
+	(c) you can tell if a region is present by checking if the first byte (the first character of Name) is not null<br>
+	</p>
+	
     <br>
     <a class="contact" href="../home/license.html">Copyright &copy; 2002, </a>
-    $Date: 2002/06/20 13:49:38 $
+    $Date: 2012/04/14 13:49:38 $
     <a class="contact" href="http://validator.w3.org/checklink?uri=referer">L</a>
     <a class="contact" href="http://validator.w3.org/check?uri=referer">H</a>
     <a class="contact" href="http://jigsaw.w3.org/css-validator/validator?uri=referer">C</a>

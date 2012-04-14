@@ -18,7 +18,7 @@
       <tr>
         <td class="toolbar"><div class="toolbar"><a class="toolbar" accesskey="1" href="../index.html">Home</a></div></td>
         <td class="toolbar"><div class="toolbar"><a class="toolbar" accesskey="2" href="../overview/index.html">Overview</a></div></td>
-	<td class="toolbar"><a class="toolbar" accesskey="3" href="../technical/index.html">Technical</a></td>
+		<td class="toolbar"><a class="toolbar" accesskey="3" href="../technical/index.html">Technical</a></td>
       </tr>
     </table>
 
@@ -31,15 +31,15 @@
 
     <p>
     The VBLKs are the workhorse of the database.  Each Disk Group, Disk, Volume,
-    Partition and Component is represented by a VBLK.  The elements'
+    Partition and Component is represented by a group of VBLKs.  The elements'
     relationships are shown in the
     <a href="../overview/database.html">Database Overview</a>.
     </p>
 
     <p>
     Each VBLK is 128 bytes long and has a standard 16 byte header.  Sometimes
-    the VBLK isn't large enough to store all the information, so two must be
-    used (Extended VBLKs).
+    the VBLK isn't large enough to store all the information, so the record will
+	be fragmented across several VBLKs (which will have the same Group Number).
     </p>
 
     <p>
@@ -78,12 +78,12 @@
       <tr>
         <td class="numeric">0x0C</td>
         <td class="numeric">2</td>
-        <td>Record Number (x of y)</td>
+        <td>Fragment Number (x of y)</td>
       </tr>
       <tr>
         <td class="numeric">0x0E</td>
         <td class="numeric">2</td>
-        <td>Number of Records</td>
+        <td>Number of fragments (VBLKs)</td>
       </tr>
     </table>
 
@@ -95,24 +95,25 @@
     </p>
 
     <p>
-    The Group Number is never zero.
+    The Group Number of an occupied VBLK is never zero.
     </p>
 
     <p>
     The Record Type can be 0x32 (Component), 0x33 (Partition),
-    0x34 (Disk), 0x35 (Disk Group) or 0x51 (Volume).
+    0x34 / 0x44 (Disk), 0x35 / 0x45 (Disk Group) or 0x51 (Volume).
+	Note that the first 4 bits denote the revision of the record, and the last 4 denote the type.
     </p>
 
-    <h3>Extended VBLKs</h3>
+    <h3>Fragmented Records</h3>
 
     <p>
-    The number of VBLKs is shown in "Number of Records" and "Record Number"
-    is a zero-based index.  To keep track of the extended VBLKs, each set
+    The number of VBLK fragments is shown in "Number of Fragments".
+	"Fragment Number" is a zero-based index.  To keep track of the record, each set
     is given a unique "Group Number".
     </p>
 
     <p>
-    N.B.  Extended VBLKs may not be located contiguously in the VMDB.
+    N.B.  Fragmented VBLKs may not be located contiguously in the VMDB.
     </p>
 
     <h3>Update Status</h3>
@@ -126,190 +127,235 @@
 
     <table summary="" cellspacing="0">
       <tr>
-	<th>Flags</th>
-	<th>Description</th>
+		<th>Flag</th>
+		<th>Description</th>
       </tr>
       <tr>
-	<td>0x00</td>
-	<td>VBLK is in a consistant state</td>
+		<td>0x00</td>
+		<td>Record is active (consistant state)</td>
       </tr>
       <tr>
-	<td>0x01</td>
-	<td>VBLK is about to be deleted, but is still active</td>
+		<td>0x01</td>
+		<td>Record is still active, but pending deletion</td>
       </tr>
       <tr>
-	<td>0x02</td>
-	<td>VBLK has just been created, but it is not yet active)</td>
+		<td>0x02</td>
+		<td>Record is pending activation</td>
       </tr>
     </table>
 
-    <h2>Volume (0x51)</h2>
+    <h2>Volume Record (0x51)</h2>
 
     <table summary="" cellspacing="0">
       <tr>
-	<th class="numeric">Offset</th>
-	<th class="numeric">Size</th>
-	<th>Description</th>
+		<th class="numeric">Offset</th>
+		<th class="numeric">Size</th>
+		<th>Description</th>
       </tr>
       <tr>
-	<td class="numeric">0x00</td>
-	<td class="numeric">16</td>
-	<td>Standard VBLK Header</td>
+		<td class="numeric">0x00</td>
+		<td class="numeric">2</td>
+		<td>Update Status</td>
+      </tr>
+	  <tr>
+		<td class="numeric">0x02</td>
+		<td class="numeric">1</td>
+		<td>Record Flags (see below)</td>
       </tr>
       <tr>
-	<td class="numeric">0x10</td>
-	<td class="numeric">2</td>
-	<td>Update Status</td>
+		<td class="numeric">0x03</td>
+		<td class="numeric">1</td>
+		<td>Record type and revision (a)</td>
       </tr>
       <tr>
-	<td class="numeric">0x12</td>
-	<td class="numeric">2</td>
-	<td>Record type and flags (a)</td>
+		<td class="numeric">0x04</td>
+		<td class="numeric">4</td>
+		<td>Record length (e)</td>
       </tr>
       <tr>
-	<td class="numeric">0x14</td>
-	<td class="numeric">4</td>
-	<td>Data length</td>
+		<td class="numeric">0x08</td>
+		<td class="numeric">P</td>
+		<td>Object Id (g)</td>
       </tr>
       <tr>
-	<td class="numeric">0x18</td>
-	<td class="numeric">P</td>
-	<td>Object Id</td>
+		<td class="numeric">..</td>
+		<td class="numeric">P</td>
+		<td>Name (string)</td>
       </tr>
       <tr>
-	<td class="numeric">..0x18</td>
-	<td class="numeric">P</td>
-	<td>Name</td>
+		<td class="numeric">..</td>
+		<td class="numeric">P</td>
+		<td>Volume Type (b)</td>
       </tr>
       <tr>
-	<td class="numeric">..0x18</td>
-	<td class="numeric">P</td>
-	<td>Volume Type (b)</td>
+		<td class="numeric">..</td>
+		<td class="numeric">P</td>
+		<td>Disable Driver Letter Assignment (string) (f)</td>
       </tr>
       <tr>
-	<td class="numeric">..0x18</td>
-	<td class="numeric">1</td>
-	<td>Zero</td>
+		<td class="numeric">..</td>
+		<td class="numeric">14</td>
+		<td>Volume State (string, null padded) (c)</td>
       </tr>
       <tr>
-	<td class="numeric">..0x19</td>
-	<td class="numeric">14</td>
-	<td>Volume State (string, null padded) (c)</td>
+		<td class="numeric">..</td>
+		<td class="numeric">1</td>
+		<td>Read Policy (see below)</td>
+      </tr>
+		<td class="numeric">..</td>
+		<td class="numeric">P</td>
+		<td>Volume Number (d)</td>
       </tr>
       <tr>
-	<td class="numeric">..0x27</td>
-	<td class="numeric">1</td>
-	<td>Volume Type? (3 Normal, 4 RAID)</td>
+		<td class="numeric">..</td>
+		<td class="numeric">4</td>
+		<td>Volume Flags (see below)</td>
       </tr>
       <tr>
-	<td class="numeric">..0x28</td>
-	<td class="numeric">1</td>
-	<td>Don't know (always 1)</td>
+		<td class="numeric">..</td>
+		<td class="numeric">P</td>
+		<td>Number of Children</td>
       </tr>
       <tr>
-	<td class="numeric">..0x29</td>
-	<td class="numeric">1</td>
-	<td>Volume Number (d)</td>
+		<td class="numeric">..</td>
+		<td class="numeric">8</td>
+		<td>Commit Transaction ID (h)</td>
       </tr>
       <tr>
-	<td class="numeric">..0x2A</td>
-	<td class="numeric">3</td>
-	<td>Zeros</td>
+		<td class="numeric">..</td>
+		<td class="numeric">8</td>
+		<td><div class="xxx">Unknown Transaction ID</div></td>
       </tr>
       <tr>
-	<td class="numeric">..0x2D</td>
-	<td class="numeric">1</td>
-	<td>Flags? (0x11 Normal, 0x13 RAID, 0x15 ?, 0x17 ?)</td>
+		<td class="numeric">..</td>
+		<td class="numeric">P</td>
+		<td>Size LBA</td>
       </tr>
       <tr>
-	<td class="numeric">..0x2E</td>
-	<td class="numeric">P</td>
-	<td>Number of Children</td>
+		<td class="numeric">..</td>
+		<td class="numeric">4</td>
+		<td>Zeros</td>
       </tr>
       <tr>
-	<td class="numeric">..0x2E</td>
-	<td class="numeric">8</td>
-	<td>Log Commit Id</td>
+        <td class="numeric">..</td>
+		<td class="numeric">1</td>
+		<td>Partition Type, e.g. 7 = NTFS</td>
       </tr>
       <tr>
-	<td class="numeric">..0x36</td>
-	<td class="numeric">8</td>
-	<td><div class="xxx">Id? or 0x00</div></td>
+		<td class="numeric">..</td>
+		<td class="numeric">16</td>
+		<td>Volume GUID</td>
       </tr>
       <tr>
-	<td class="numeric">..0x3E</td>
-	<td class="numeric">P</td>
-	<td>Size</td>
+		<td class="numeric">..</td>
+		<td class="numeric">P</td>
+		<td><div class="opt">Id1?</div></td>
       </tr>
       <tr>
-	<td class="numeric">..0x3E</td>
-	<td class="numeric">4</td>
-	<td>Zeros</td>
+		<td class="numeric">..</td>
+		<td class="numeric">P</td>
+		<td><div class="opt">Id2?</div></td>
       </tr>
       <tr>
-        <td class="numeric">..0x42</td>
-	<td class="numeric">1</td>
-	<td>Partition Type, e.g. 7 = NTFS</td>
+		<td class="numeric">..</td>
+		<td class="numeric">P</td>
+		<td><div class="opt">Column Size LBA</div></td>
       </tr>
       <tr>
-	<td class="numeric">..0x43</td>
-	<td class="numeric">16</td>
-	<td>Volume Id (GUID, ???)</td>
-      </tr>
-      <tr>
-	<td class="numeric">..0x53</td>
-	<td class="numeric">P</td>
-	<td><div class="opt">Id1?</div></td>
-      </tr>
-      <tr>
-	<td class="numeric">..0x53</td>
-	<td class="numeric">P</td>
-	<td><div class="opt">Id2?</div></td>
-      </tr>
-      <tr>
-	<td class="numeric">..0x53</td>
-	<td class="numeric">P</td>
-	<td><div class="opt">Size (if children?)</div></td>
-      </tr>
-      <tr>
-	<td class="numeric">..0x53</td>
-	<td class="numeric">P</td>
-	<td><div class="opt">Drive Hint (string)</div></td>
+		<td class="numeric">..</td>
+		<td class="numeric">P</td>
+		<td><div class="opt">Mount Hint (string)</div></td>
       </tr>
     </table>
 
-    <p>The flags denote the presence of an optional field</p>
+    <p>The record flags denote the presence of an optional field</p>
     <p>N.B.  Id1 and Id2 are mutually exclusive.</p>
-    <p>N.B.  The optional fields will always be in the order: Id, Size, Drive Hint</p>
+    <p>N.B.  The optional fields will always be in the order: Id, Size, Mount Hint</p>
 
+	<h4>Record Flags:</h4>
+	
     <table summary="" cellspacing="0">
       <tr>
-	<th>Flags</th>
-	<th>Description</th>
+		<th>Flag</th>
+		<th>Description</th>
       </tr>
       <tr>
-	<td>0x08</td>
-	<td>Id1?</td>
+		<td>0x08</td>
+		<td>Id1?</td>
       </tr>
       <tr>
-	<td>0x20</td>
-	<td>Id2?</td>
+		<td>0x20</td>
+		<td>Id2?</td>
       </tr>
       <tr>
-	<td>0x80</td>
-	<td>Size</td>
+		<td>0x80</td>
+		<td>Column Size</td>
       </tr>
       <tr>
-	<td>0x02</td>
-	<td>Drive Hint</td>
+		<td>0x02</td>
+		<td>Mount Hint</td>
       </tr>
     </table>
-
+	
+	<h4>Volume Flags:</h4>
+	
+	<table summary="" cellspacing="0">
+      <tr>
+		<th>Flag</th>
+		<th>Description</th>
+      </tr>
+      <tr>
+		<td>0x01</td>
+		<td>writeback</td>
+      </tr>
+      <tr>
+		<td>0x02</td>
+		<td>writecopy</td>
+      </tr>
+      <tr>
+		<td>0x04</td>
+		<td>crashed</td>
+      </tr>
+      <tr>
+		<td>0x10</td>
+		<td><div class="xxx">Unknown (default)</div></td>
+      </tr>
+    </table>
+	
+	<h4>Read Policy:</h4>
+	
+	<table summary="" cellspacing="0">
+      <tr>
+		<th>Value</th>
+		<th>Description</th>
+      </tr>
+      <tr>
+		<td>1</td>
+		<td>Round</td>
+      </tr>
+      <tr>
+		<td>2</td>
+		<td>Prefer</td>
+      </tr>
+	  <tr>
+		<td>3</td>
+		<td>Select</td>
+      </tr>
+	  <tr>
+		<td>4</td>
+		<td>RAID</td>
+      </tr>
+    </table>
+	
     <p>
-    (a) Revision 5 of VBLK type 1<br>
+    (a) Revision 5 of record type 1<br>
     (b) Volume Type: "gen" or "raid5"<br>
-    (c) Volume State: "ACTIVE"<br>
-    (d) Starts at 5 and unused numbers are reused
+    (c) Volume State: "ACTIVE" or "SYNC" (for RAID 5)<br>
+    (d) Initialized as 0xFFFFFFFF, Starts at 5 and unused numbers are reused<br>
+	(e) length in bytes (this does not include VBLK headers)<br>
+	(f) Disable driver letter assignment: "8000000000000000"<br>
+	(g) The ID of the object will be the Transaction ID that created this object<br>
+	(h) Transaction ID of the last update<br>
     </p>
 
     <h2>Component (0x32)</h2>
@@ -321,92 +367,94 @@
         <th>Description</th>
       </tr>
       <tr>
-	<td class="numeric">0x00</td>
-	<td class="numeric">16</td>
-	<td>Standard VBLK Header</td>
+		<td class="numeric">0x00</td>
+		<td class="numeric">2</td>
+		<td>Update Status</td>
+      </tr>
+	  <tr>
+		<td class="numeric">0x02</td>
+		<td class="numeric">1</td>
+		<td>Record Flags (see below)</td>
       </tr>
       <tr>
-	<td class="numeric">0x10</td>
-	<td class="numeric">2</td>
-	<td>Update Status</td>
+		<td class="numeric">0x03</td>
+		<td class="numeric">1</td>
+		<td>Record type and revision (a)</td>
       </tr>
       <tr>
-	<td class="numeric">0x12</td>
-	<td class="numeric">2</td>
-	<td>Record type and flags (a)</td>
+		<td class="numeric">0x04</td>
+		<td class="numeric">4</td>
+		<td>Record length</td>
       </tr>
       <tr>
-	<td class="numeric">0x14</td>
-	<td class="numeric">4</td>
-	<td>Data length</td>
+		<td class="numeric">0x08</td>
+		<td class="numeric">P</td>
+		<td>Object Id</td>
       </tr>
       <tr>
-	<td class="numeric">0x18</td>
-	<td class="numeric">P</td>
-	<td>Object Id</td>
+		<td class="numeric">..</td>
+		<td class="numeric">P</td>
+		<td>Name (string)</td>
       </tr>
       <tr>
-	<td class="numeric">..0x18</td>
-	<td class="numeric">P</td>
-	<td>Name (string)</td>
+		<td class="numeric">..</td>
+		<td class="numeric">P</td>
+		<td>Volume State (string) (b)</td>
       </tr>
       <tr>
-	<td class="numeric">..0x18</td>
-	<td class="numeric">P</td>
-	<td>Volume State (b)</td>
+		<td class="numeric">..</td>
+		<td class="numeric">1</td>
+		<td>Partition Layout (see below)</td>
       </tr>
       <tr>
-	<td class="numeric">..0x18</td>
-	<td class="numeric">1</td>
-	<td>Component type (c)</td>
+		<td class="numeric">..</td>
+		<td class="numeric">4</td>
+		<td>Component Flags (see below)</td>
       </tr>
       <tr>
-	<td class="numeric">..0x19</td>
-	<td class="numeric">4</td>
-	<td>Zeros</td>
+		<td class="numeric">..</td>
+		<td class="numeric">P</td>
+		<td>Number of children</td>
       </tr>
       <tr>
-	<td class="numeric">..0x1D</td>
-	<td class="numeric">P</td>
-	<td>Number of children</td>
+		<td class="numeric">..</td>
+		<td class="numeric">8</td>
+		<td>Commit Transaction Id</td>
       </tr>
       <tr>
-	<td class="numeric">..0x1D</td>
-	<td class="numeric">8</td>
-	<td>Log Commit Id</td>
+		<td class="numeric">..</td>
+		<td class="numeric">8</td>
+		<td>Zeros</td>
       </tr>
       <tr>
-	<td class="numeric">..0x25</td>
-	<td class="numeric">8</td>
-	<td>Zeros</td>
+		<td class="numeric">..</td>
+		<td class="numeric">P</td>
+		<td>Volume Id</td>
       </tr>
       <tr>
-	<td class="numeric">..0x2D</td>
-	<td class="numeric">P</td>
-	<td>Parent Id (A Volume)</td>
+		<td class="numeric">..</td>
+		<td class="numeric">P</td>
+		<td>Log SD (<= UInt64.Max)</td>
       </tr>
       <tr>
-	<td class="numeric">..0x2D</td>
-	<td class="numeric">1</td>
-	<td>Zero</td>
+		<td class="numeric">..</td>
+		<td class="numeric">P</td>
+		<td><div class="opt">Stripe Size LBA (c)</div></td>
       </tr>
       <tr>
-	<td class="numeric">..0x2E</td>
-	<td class="numeric">P</td>
-	<td><div class="opt">Stripe Size (in sectors)</div></td>
-      </tr>
-      <tr>
-	<td class="numeric">..0x2E</td>
-	<td class="numeric">P</td>
-	<td><div class="opt">Number of Columns</div></td>
+		<td class="numeric">..</td>
+		<td class="numeric">P</td>
+		<td><div class="opt">Number of Columns (c)</div></td>
       </tr>
     </table>
 
-    <p>The flags denote the presence of an optional field</p>
+    <p>The record flags denote the presence of an optional field</p>
 
+	<h4>Record Flags:</h4>
+	
     <table summary="" cellspacing="0">
       <tr>
-	<th>Flags</th>
+		<th>Flag</th>
         <th>Description</th>
       </tr>
       <tr>
@@ -414,11 +462,53 @@
 	<td>Both optional fields</td>
       </tr>
     </table>
+	
+	<h4>Component Flags:</h4>
+	
+	<table summary="" cellspacing="0">
+      <tr>
+		<th>Flags</th>
+		<th>Description</th>
+      </tr>
+      <tr>
+		<td>0x02</td>
+		<td>recover</td>
+      </tr>
+      <tr>
+		<td>0x04</td>
+		<td>iofail</td>
+      </tr>
+	  <tr>
+		<td>0x08</td>
+		<td>pending</td>
+      </tr>
+    </table>
+	
+	<h4>Partition Layout:</h4>
+	
+	<table summary="" cellspacing="0">
+      <tr>
+		<th>Value</th>
+		<th>Description</th>
+      </tr>
+      <tr>
+		<td>1</td>
+		<td>Stripe</td>
+      </tr>
+      <tr>
+		<td>2</td>
+		<td>Concatenated (simple and spanned volumes)</td>
+      </tr>
+	  <tr>
+		<td>3</td>
+		<td>RAID 5</td>
+      </tr>
+    </table>
 
     <p>
-    (a) Revision 3 of VBLK type 2<br>
-    (b) Component type: 1 Stripe, 2 Basic or Spanned, 3 RAID<br>
-    (c) Volume State: "ACTIVE"
+    (a) Revision 3 of record type 2<br>
+    (b) Volume State: "ACTIVE"<br>
+	(c) The value in this field must not exceed 4 bytes (excluding length prefix)
     </p>
 
     <h2>Partition (0x33)</h2>
@@ -430,405 +520,508 @@
         <th>Description</th>
       </tr>
       <tr>
-	<td class="numeric">0x00</td>
-	<td class="numeric">16</td>
-	<td>Standard VBLK Header</td>
+		<td class="numeric">0x00</td>
+		<td class="numeric">2</td>
+		<td>Update Status</td>
+      </tr>
+	  <tr>
+		<td class="numeric">0x02</td>
+		<td class="numeric">1</td>
+		<td>Record Flags (see below)</td>
       </tr>
       <tr>
-	<td class="numeric">0x10</td>
-	<td class="numeric">2</td>
-	<td>Update Status</td>
+		<td class="numeric">0x03</td>
+		<td class="numeric">1</td>
+		<td>Record type and revision (a)</td>
       </tr>
       <tr>
-	<td class="numeric">0x12</td>
-	<td class="numeric">2</td>
-	<td>Record type and flags (a)</td>
+		<td class="numeric">0x04</td>
+		<td class="numeric">4</td>
+		<td>Record length</td>
       </tr>
       <tr>
-	<td class="numeric">0x14</td>
-	<td class="numeric">4</td>
-	<td>Data length</td>
+		<td class="numeric">0x08</td>
+		<td class="numeric">P</td>
+		<td>Object Id</td>
       </tr>
       <tr>
-	<td class="numeric">0x18</td>
-	<td class="numeric">P</td>
-	<td>Object Id</td>
+		<td class="numeric">..</td>
+		<td class="numeric">P</td>
+		<td>Name (string)</td>
       </tr>
       <tr>
-	<td class="numeric">..0x18</td>
-	<td class="numeric">P</td>
-	<td>Name (string)</td>
+		<td class="numeric">..</td>
+		<td class="numeric">4</td>
+		<td>Partition Flags (see below)</td>
       </tr>
       <tr>
-	<td class="numeric">..0x18</td>
-	<td class="numeric">4</td>
-	<td>Zeros</td>
+		<td class="numeric">..</td>
+		<td class="numeric">8</td>
+		<td>Commit Transaction Id</td>
       </tr>
       <tr>
-	<td class="numeric">..0x1C</td>
-	<td class="numeric">8</td>
-	<td>Log Commit Id</td>
+		<td class="numeric">..</td>
+		<td class="numeric">8</td>
+		<td>Disk Offset LBA</td>
       </tr>
       <tr>
-	<td class="numeric">..0x24</td>
-	<td class="numeric">8</td>
-	<td>Start</td>
+		<td class="numeric">..</td>
+		<td class="numeric">8</td>
+		<td>Partition Offset In Column LBA</td>
       </tr>
       <tr>
-	<td class="numeric">..0x2C</td>
-	<td class="numeric">8</td>
-	<td>Volume Offset</td>
+		<td class="numeric">..</td>
+		<td class="numeric">P</td>
+		<td>Size LBA</td>
       </tr>
       <tr>
-	<td class="numeric">..0x34</td>
-	<td class="numeric">P</td>
-	<td>Size</td>
+		<td class="numeric">..</td>
+		<td class="numeric">P</td>
+		<td>Component Id</td>
       </tr>
       <tr>
-	<td class="numeric">..0x34</td>
-	<td class="numeric">P</td>
-	<td>Parent's Object Id (Component)</td>
+		<td class="numeric">..</td>
+		<td class="numeric">P</td>
+		<td>Disk Id</td>
       </tr>
       <tr>
-	<td class="numeric">..0x34</td>
-	<td class="numeric">P</td>
-	<td>Disk's Object Id</td>
+		<td class="numeric">..</td>
+		<td class="numeric">P</td>
+		<td><div class="opt">Column Index  (b)</div></td>
       </tr>
-      <tr>
-	<td class="numeric">..0x34</td>
-	<td class="numeric">P</td>
-	<td><div class="opt">Component part index</div></td>
+	  <tr>
+		<td class="numeric">..</td>
+		<td class="numeric">P</td>
+		<td><div class="opt">Hidden (sectors?) Count (b)</div></td>
       </tr>
     </table>
 
-    <p>The flags denote the presence of an optional field</p>
+    <p>The record flags denote the presence of an optional field</p>
+	
+	<h4>Record Flags:</h4>
 
     <table summary="" cellspacing="0">
       <tr>
-	<th>Flags</th>
+		<th>Flag</th>
         <th>Description</th>
       </tr>
       <tr>
-	<td>0x08</td>
-	<td>Component part index</td>
+		<td>0x08</td>
+		<td>Column Index</td>
+      </tr>
+	  <tr>
+		<td>0x02</td>
+		<td>Hidden Count</td>
       </tr>
     </table>
 
+	<h4>Partition Flags:</h4>
+	
+	<table summary="" cellspacing="0">
+      <tr>
+		<th>Flag</th>
+		<th>Description</th>
+      </tr>
+      <tr>
+		<td>0x0008</td>
+		<td>recover</td>
+      </tr>
+      <tr>
+		<td>0x0010</td>
+		<td>kdetach</td>
+      </tr>
+      <tr>
+		<td>0x0020</td>
+		<td>relocate</td>
+      </tr>
+	  <tr>
+		<td>0x0040</td>
+		<td>boot-extended</td>
+      </tr>
+	  <tr>
+		<td>0x0100</td>
+		<td>origboot</td>
+      </tr>
+      <tr>
+		<td>0x1000</td>
+		<td>volatile</td>
+      </tr>
+    </table>
+	
     <p>
-    (a) Revision 3 of VBLK type 3
+    (a) Revision 3 of record type 3<br>
+	(b) The value in this field must not exceed 4 bytes (excluding length prefix)<br>
     </p>
 
     <h2>Disk (0x34)</h2>
 
     <table summary="" cellspacing="0">
       <tr>
-	<th class="numeric">Offset</th>
-	<th class="numeric">Size</th>
-	<th>Description</th>
+		<th class="numeric">Offset</th>
+		<th class="numeric">Size</th>
+		<th>Description</th>
       </tr>
       <tr>
-	<td class="numeric">0x00</td>
-	<td class="numeric">16</td>
-	<td>Standard VBLK Header</td>
+		<td class="numeric">0x00</td>
+		<td class="numeric">2</td>
+		<td>Update Status</td>
+      </tr>
+	  <tr>
+		<td class="numeric">0x02</td>
+		<td class="numeric">1</td>
+		<td>Record Flags (see below)</td>
       </tr>
       <tr>
-	<td class="numeric">0x10</td>
-	<td class="numeric">2</td>
-	<td>Update Status</td>
+		<td class="numeric">0x03</td>
+		<td class="numeric">1</td>
+		<td>Record type and revision (a)</td>
       </tr>
       <tr>
-	<td class="numeric">0x12</td>
-	<td class="numeric">2</td>
-	<td>Record type and flags (a)</td>
+		<td class="numeric">0x04</td>
+		<td class="numeric">4</td>
+		<td>Record length</td>
       </tr>
       <tr>
-	<td class="numeric">0x14</td>
-	<td class="numeric">4</td>
-	<td>Data length</td>
+		<td class="numeric">0x08</td>
+		<td class="numeric">P</td>
+		<td>Object Id</td>
       </tr>
       <tr>
-	<td class="numeric">0x18</td>
-	<td class="numeric">P</td>
-	<td>Object Id</td>
+		<td class="numeric">..</td>
+		<td class="numeric">P</td>
+		<td>Name (string)</td>
       </tr>
       <tr>
-	<td class="numeric">..0x18</td>
-	<td class="numeric">P</td>
-	<td>Name (string)</td>
+		<td class="numeric">..</td>
+		<td class="numeric">P</td>
+		<td>Disk GUID (string)</td>
       </tr>
       <tr>
-	<td class="numeric">..0x18</td>
-	<td class="numeric">P</td>
-	<td>Disk Id (GUID, string)</td>
+		<td class="numeric">..</td>
+		<td class="numeric">P</td>
+		<td>Last Device Name (string)</td>
       </tr>
       <tr>
-	<td class="numeric">..0x18</td>
-	<td class="numeric">P</td>
-	<td>Alternate Name</td>
+		<td class="numeric">..</td>
+		<td class="numeric">4</td>
+		<td>Disk Flags (see below)</td>
       </tr>
       <tr>
-	<td class="numeric">..0x18</td>
-	<td class="numeric">4</td>
-	<td>Zeros</td>
-      </tr>
-      <tr>
-	<td class="numeric">..0x1D</td>
-	<td class="numeric">8</td>
-	<td>Log Commit Id</td>
+		<td class="numeric">..</td>
+		<td class="numeric">8</td>
+		<td>Commit Tranaction Id</td>
       </tr>
     </table>
 
-    <p>N.B. This VBLK type doesn't have any flags</p>
+    <p>N.B. This record type doesn't have any flags</p>
 
     <p>
-    (a) Revision 3 of VBLK type 4
+    (a) Revision 3 of record type 4<br>
     </p>
 
     <h2>Disk (0x44)</h2>
 
     <table summary="" cellspacing="0">
       <tr>
-	<th class="numeric">Offset</th>
-	<th class="numeric">Size</th>
-	<th>Description</th>
+		<th class="numeric">Offset</th>
+		<th class="numeric">Size</th>
+		<th>Description</th>
       </tr>
       <tr>
-	<td class="numeric">0x00</td>
-	<td class="numeric">16</td>
-	<td>Standard VBLK Header</td>
+		<td class="numeric">0x00</td>
+		<td class="numeric">2</td>
+		<td>Update Status</td>
+      </tr>
+	  <tr>
+		<td class="numeric">0x02</td>
+		<td class="numeric">1</td>
+		<td>Record Flags (see below)</td>
       </tr>
       <tr>
-	<td class="numeric">0x10</td>
-	<td class="numeric">2</td>
-	<td>Update Status</td>
+		<td class="numeric">0x03</td>
+		<td class="numeric">1</td>
+		<td>Record type and revision (a)</td>
       </tr>
       <tr>
-	<td class="numeric">0x12</td>
-	<td class="numeric">2</td>
-	<td>Record type and flags (a)</td>
+		<td class="numeric">0x04</td>
+		<td class="numeric">4</td>
+		<td>Record length</td>
       </tr>
       <tr>
-	<td class="numeric">0x14</td>
-	<td class="numeric">4</td>
-	<td>Data length</td>
+		<td class="numeric">0x08</td>
+		<td class="numeric">P</td>
+		<td>Object Id</td>
       </tr>
       <tr>
-	<td class="numeric">0x18</td>
-	<td class="numeric">P</td>
-	<td>Object Id</td>
+		<td class="numeric">..</td>
+		<td class="numeric">P</td>
+		<td>Name (string)</td>
       </tr>
       <tr>
-	<td class="numeric">..0x18</td>
-	<td class="numeric">P</td>
-	<td>Name (string)</td>
+		<td class="numeric">..</td>
+		<td class="numeric">16</td>
+		<td>Disk GUID (binary)</td>
       </tr>
       <tr>
-	<td class="numeric">..0x18</td>
-	<td class="numeric">16</td>
-	<td>Disk Id (GUID, binary)</td>
+		<td class="numeric">..</td>
+		<td class="numeric">16</td>
+		<td>Disk Set GUID (binary)</td>
+      </tr>
+	  <tr>
+		<td class="numeric">..</td>
+		<td class="numeric">P</td>
+		<td>Last Device Name (string)</td>
       </tr>
       <tr>
-	<td class="numeric">..0x28</td>
-	<td class="numeric">16</td>
-	<td>Disk Id (GUID, binary)</td>
+		<td class="numeric">..</td>
+		<td class="numeric">4</td>
+		<td>Disk Flags (see below)</td>
       </tr>
-      <tr>
-	<td class="numeric">..0x38</td>
-	<td class="numeric">3</td>
-	<td>Zeros</td>
-      </tr>
-      <tr>
-	<td class="numeric">..0x3B</td>
-	<td class="numeric">2</td>
-	<td><div class="xxx">Id?</div></td>
-      </tr>
-      <tr>
-	<td class="numeric">..0x3D</td>
-	<td class="numeric">8</td>
-	<td>Log Commit Id</td>
+		<td class="numeric">..</td>
+		<td class="numeric">8</td>
+		<td>Commit Transaction Id</td>
       </tr>
     </table>
 
-    <p>N.B. This VBLK type doesn't have any flags</p>
+    <p>N.B. This record type doesn't have any flags</p>
 
     <p>
-    (a) Revision 4 of VBLK type 4
+    (a) Revision 4 of record type 4<br>
     </p>
+	
+	<h4>Disk Flags:</h4>
+	
+	<table summary="" cellspacing="0">
+      <tr>
+		<th>Flag</th>
+		<th>Description</th>
+      </tr>
+      <tr>
+		<td>0x0001</td>
+		<td>reserved</td>
+      </tr>
+      <tr>
+		<td>0x0002</td>
+		<td>spare</td>
+      </tr>
+      <tr>
+		<td>0x0004</td>
+		<td>failing</td>
+      </tr>
+	  <tr>
+		<td>0x0008</td>
+		<td>encap-pending</td>
+      </tr>
+	  <tr>
+		<td>0x0010</td>
+		<td>merge-required</td>
+      </tr>
+      <tr>
+		<td>0x0100</td>
+		<td>removed</td>
+      </tr>
+	  <tr>
+		<td>0x0200</td>
+		<td>detached</td>
+      </tr>
+    </table>
 
     <h2>Disk Group (0x35)</h2>
 
-    disk group name limited to 28 chars
+    Disk group name limited to 18 chars
 
     <table summary="" cellspacing="0">
       <tr>
-	<th class="numeric">Offset</th>
-	<th class="numeric">Size</th>
-	<th>Description</th>
+		<th class="numeric">Offset</th>
+		<th class="numeric">Size</th>
+		<th>Description</th>
       </tr>
       <tr>
-	<td class="numeric">0x00</td>
-	<td class="numeric">16</td>
-	<td>Standard VBLK Header</td>
+		<td class="numeric">0x00</td>
+		<td class="numeric">2</td>
+		<td>Update Status</td>
+      </tr>
+	  <tr>
+		<td class="numeric">0x02</td>
+		<td class="numeric">1</td>
+		<td>Record Flags (see below)</td>
       </tr>
       <tr>
-	<td class="numeric">0x10</td>
-	<td class="numeric">2</td>
-	<td>Update Status</td>
+		<td class="numeric">0x03</td>
+		<td class="numeric">1</td>
+		<td>Record type and revision (a)</td>
       </tr>
       <tr>
-	<td class="numeric">0x12</td>
-	<td class="numeric">2</td>
-	<td>Record type and flags (a)</td>
+		<td class="numeric">0x04</td>
+		<td class="numeric">4</td>
+		<td>Record length</td>
       </tr>
       <tr>
-	<td class="numeric">0x14</td>
-	<td class="numeric">4</td>
-	<td>Data length</td>
+		<td class="numeric">0x08</td>
+		<td class="numeric">P</td>
+		<td>Object Id</td>
       </tr>
       <tr>
-	<td class="numeric">0x18</td>
-	<td class="numeric">P</td>
-	<td>Object Id</td>
+		<td class="numeric">..</td>
+		<td class="numeric">P</td>
+		<td>Name (string)</td>
       </tr>
       <tr>
-	<td class="numeric">..0x18</td>
-	<td class="numeric">P</td>
-	<td>Name (string)</td>
+		<td class="numeric">..</td>
+		<td class="numeric">P</td>
+		<td>Disk Group GUID (string)</td>
       </tr>
       <tr>
-	<td class="numeric">..0x18</td>
-	<td class="numeric">P</td>
-	<td>Disk Group Id (GUID, string)</td>
+		<td class="numeric">..</td>
+		<td class="numeric">4</td>
+		<td>Zeros</td>
       </tr>
       <tr>
-	<td class="numeric">..0x18</td>
-	<td class="numeric">4</td>
-	<td>Zeros</td>
+		<td class="numeric">..</td>
+		<td class="numeric">8</td>
+		<td>Commit Transaction Id</td>
       </tr>
       <tr>
-	<td class="numeric">..0x1C</td>
-	<td class="numeric">8</td>
-	<td>Log Commit Id</td>
+		<td class="numeric">..</td>
+		<td class="numeric">P</td>
+		<td><div class="opt">Number Of Config Copies (b) (c)</div></td>
       </tr>
       <tr>
-	<td class="numeric">..0x24</td>
-	<td class="numeric">P</td>
-	<td><div class="opt">0xFFFFFFFF</div></td>
+		<td class="numeric">..</td>
+		<td class="numeric">P</td>
+		<td><div class="opt">Number Of Log Copies (b) (c)</div></td>
       </tr>
-      <tr>
-	<td class="numeric">..0x24</td>
-	<td class="numeric">P</td>
-	<td><div class="opt">0xFFFFFFFF</div></td>
+	  <tr>
+		<td class="numeric">..</td>
+		<td class="numeric">P</td>
+		<td><div class="opt">Minors Greater Than Or Equal To (b) (d)</div></td>
       </tr>
     </table>
 
-    <p>The flags denote the presence of an optional field</p>
+    <p>The record flags denote the presence of an optional field</p>
 
     <table summary="" cellspacing="0">
       <tr>
-	<th>Flags</th>
-	<th>Description</th>
+		<th>Flag</th>
+		<th>Description</th>
       </tr>
       <tr>
-	<td>0x08</td>
-	<td>Both optional fields (probably)</td>
+		<td>0x08</td>
+		<td>Number Of Copies</td>
+      </tr>
+	  <tr>
+		<td>0x10</td>
+		<td>Number of Minors</td>
       </tr>
     </table>
 
     <p>
-    (a) Revision 3 of VBLK type 5
+    (a) Revision 3 of record type 5<br>
+	(b) The value in this field must not exceed 4 bytes (excluding length prefix)<br>
+	(c) Special values: 0xFFFFFFFF means 'all', 0 means 'default'.<br>
+	(d) Default is 0<br>
     </p>
 
     <h2>Disk Group (0x45)</h2>
 
     <table summary="" cellspacing="0">
       <tr>
-	<th class="numeric">Offset</th>
-	<th class="numeric">Size</th>
-	<th>Description</th>
+		<th class="numeric">Offset</th>
+		<th class="numeric">Size</th>
+		<th>Description</th>
       </tr>
       <tr>
-	<td class="numeric">0x00</td>
-	<td class="numeric">16</td>
-	<td>Standard VBLK Header</td>
+		<td class="numeric">0x00</td>
+		<td class="numeric">2</td>
+		<td>Update Status</td>
+      </tr>
+	  <tr>
+		<td class="numeric">0x02</td>
+		<td class="numeric">1</td>
+		<td>Record Flags (see below)</td>
       </tr>
       <tr>
-	<td class="numeric">0x10</td>
-	<td class="numeric">2</td>
-	<td>Update Status</td>
+		<td class="numeric">0x03</td>
+		<td class="numeric">1</td>
+		<td>Record type and revision (a)</td>
       </tr>
       <tr>
-	<td class="numeric">0x12</td>
-	<td class="numeric">2</td>
-	<td>Record type and flags (a)</td>
+		<td class="numeric">0x04</td>
+		<td class="numeric">4</td>
+		<td>Record length</td>
       </tr>
       <tr>
-	<td class="numeric">0x14</td>
-	<td class="numeric">4</td>
-	<td>Data length</td>
+		<td class="numeric">0x08</td>
+		<td class="numeric">P</td>
+		<td>Object Id</td>
       </tr>
       <tr>
-	<td class="numeric">0x18</td>
-	<td class="numeric">P</td>
-	<td>Object Id</td>
+		<td class="numeric">..</td>
+		<td class="numeric">P</td>
+		<td>Name (string)</td>
       </tr>
       <tr>
-	<td class="numeric">..0x18</td>
-	<td class="numeric">P</td>
-	<td>Name (string)</td>
+		<td class="numeric">..</td>
+		<td class="numeric">16</td>
+		<td>Disk Group GUID (binary)</td>
       </tr>
       <tr>
-	<td class="numeric">..0x18</td>
-	<td class="numeric">16</td>
-	<td>Disk Group Id (GUID, binary)
+		<td class="numeric">..</td>
+		<td class="numeric">16</td>
+		<td>Disk Set GUID (binary)
       </tr>
       <tr>
-	<td class="numeric">..0x28</td>
-	<td class="numeric">16</td>
-	<td>Disk Set Id (GUID, binary)
+		<td class="numeric">..</td>
+		<td class="numeric">4</td>
+		<td>Zeros</td>
       </tr>
       <tr>
-	<td class="numeric">..0x38</td>
-	<td class="numeric">4</td>
-	<td>Zeros</td>
+		<td class="numeric">..</td>
+		<td class="numeric">8</td>
+		<td>Commit Transaction Id</td>
       </tr>
       <tr>
-	<td class="numeric">..0x3C</td>
-	<td class="numeric">8</td>
-	<td>Log Commit Id</td>
+		<td class="numeric">..</td>
+		<td class="numeric">P</td>
+		<td><div class="opt">Number Of Config Copies (b)</div></td>
       </tr>
       <tr>
-	<td class="numeric">..0x44</td>
-	<td class="numeric">P</td>
-	<td><div class="opt">0xFFFFFFFF</div></td>
+		<td class="numeric">..</td>
+		<td class="numeric">P</td>
+		<td><div class="opt">Number Of Log Copies (b)</div></td>
       </tr>
-      <tr>
-	<td class="numeric">..0x44</td>
-	<td class="numeric">P</td>
-	<td><div class="opt">0xFFFFFFFF or 0x00</div></td>
+	  <tr>
+		<td class="numeric">..</td>
+		<td class="numeric">P</td>
+		<td><div class="opt">Minors Greater Than Or Equal To (b)</div></td>
       </tr>
     </table>
 
-    <p>The flags denote the presence of an optional field</p>
+    <p>The record flags denote the presence of an optional field</p>
 
     <table summary="" cellspacing="0">
       <tr>
-	<th>Flags</th>
-	<th>Description</th>
+		<th>Flag</th>
+		<th>Description</th>
       </tr>
       <tr>
-	<td>0x08</td>
-	<td>Both optional fields (probably)</td>
+		<td>0x08</td>
+		<td>Number Of Copies</td>
+      </tr>
+	  <tr>
+		<td>0x10</td>
+		<td>Number of Minors</td>
       </tr>
     </table>
 
     <p>
-    (a) Revision 4 of VBLK type 5
+    (a) Revision 4 of record type 5<br>
+	(b) The value in this field must not exceed 4 bytes (excluding length prefix)<br>
     </p>
 
     <br>
     <a class="contact" href="../home/license.html">Copyright &copy; 2002, </a>
-    $Date: 2002/06/20 14:40:21 $
+    $Date: 2012/04/14 14:40:21 $
     <a class="contact" href="http://validator.w3.org/checklink?uri=referer">L</a>
     <a class="contact" href="http://validator.w3.org/check?uri=referer">H</a>
     <a class="contact" href="http://jigsaw.w3.org/css-validator/validator?uri=referer">C</a>

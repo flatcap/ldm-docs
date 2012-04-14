@@ -52,97 +52,107 @@
       <tr>
         <td class="numeric">0x08</td>
         <td class="numeric">4</td>
-	<td><div class="xxx">Don't know (looks sequential)</div></td>
+	    <td>Checksum (a)</td>
       </tr>
       <tr>
         <td class="numeric">0x0C</td>
         <td class="numeric">2</td>
-	<td>Major Version Number (Always 0x02)</td>
+	    <td>Major Version Number (see below)</td>
       </tr>
       <tr>
         <td class="numeric">0x0E</td>
         <td class="numeric">2</td>
-	<td>Minor Version Number (Always 0x0B)</td>
+	    <td>Minor Version Number (see below)</td>
       </tr>
       <tr>
         <td class="numeric">0x10</td>
         <td class="numeric">8</td>
-	<td>Timestamp (of what?)</td>
+	    <td>Timestamp of Last Update (FileTime UTC)</td>
       </tr>
       <tr>
         <td class="numeric">0x18</td>
         <td class="numeric">8</td>
-        <td>Number?</td>
+        <td>Update Sequence Number (b)</td>
       </tr>
       <tr>
         <td class="numeric">0x20</td>
         <td class="numeric">8</td>
-        <td>Size?</td>
+        <td>Primary Private Header LBA</td>
       </tr>
       <tr>
         <td class="numeric">0x28</td>
         <td class="numeric">8</td>
-        <td>Size?</td>
+        <td>Secondary Private Header LBA</td>
       </tr>
       <tr>
         <td class="numeric">0x30</td>
         <td class="numeric">64</td>
-        <td>Disk Id GUID (string, null padded)</td>
+        <td>Disk GUID (string, null padded)</td>
       </tr>
       <tr>
         <td class="numeric">0x70</td>
         <td class="numeric">64</td>
-        <td>Host Id GUID (string, null padded)</td>
+        <td>Host GUID (string, null padded)</td>
       </tr>
       <tr>
         <td class="numeric">0xB0</td>
         <td class="numeric">64</td>
-        <td>Disk Group Id GUID (string, null padded)</td>
+        <td>Disk Group GUID (string, null padded)</td>
       </tr>
       <tr>
         <td class="numeric">0xF0</td>
-        <td class="numeric">32</td>
+        <td class="numeric">31</td>
         <td>Disk Group Name (string, null padded)</td>
       </tr>
       <tr>
-        <td class="numeric">0x110</td>
-        <td class="numeric">2</td>
-        <td>Unknown</td>
+        <td class="numeric">0x10F</td>
+        <td class="numeric">4</td>
+        <td>Bytes Per Block (a.k.a. Sector)</td>
+      </tr>
+	  <tr>
+        <td class="numeric">0x113</td>
+        <td class="numeric">4</td>
+        <td>Private Header Flags (see below)</td>
       </tr>
       <tr>
-        <td class="numeric">0x112</td>
-        <td class="numeric">9</td>
-        <td>Zeros</td>
+        <td class="numeric">0x117</td>
+        <td class="numeric">2</td>
+        <td>Public Region Slice Number</td>
+      </tr>
+	  <tr>
+        <td class="numeric">0x119</td>
+        <td class="numeric">2</td>
+        <td>Private Region Slice Number</td>
       </tr>
       <tr>
         <td class="numeric">0x11B</td>
         <td class="numeric">8</td>
-        <td>Logical Disk Start (a)</td>
+        <td>Public Region Start LBA</td>
       </tr>
       <tr>
         <td class="numeric">0x123</td>
         <td class="numeric">8</td>
-        <td>Logical Disk Size (a)</td>
+        <td>Public Region Size LBA</td>
       </tr>
       <tr>
         <td class="numeric">0x12B</td>
         <td class="numeric">8</td>
-        <td>Configuration Start (a)</td>
+        <td>Private Region Start LBA</td>
       </tr>
       <tr>
         <td class="numeric">0x133</td>
         <td class="numeric">8</td>
-        <td>Configuration Size (a)</td>
+        <td>Private Region Size LBA</td>
       </tr>
       <tr>
         <td class="numeric">0x13B</td>
         <td class="numeric">8</td>
-        <td>Number of TOCs</td>
+        <td>Primary TOC LBA (relative to Private Region Start)</td>
       </tr>
       <tr>
         <td class="numeric">0x143</td>
         <td class="numeric">8</td>
-        <td>TOC Size</td>
+        <td>Secondary TOC LBA (relative to Private Region Start)</td>
       </tr>
       <tr>
         <td class="numeric">0x14B</td>
@@ -177,21 +187,68 @@
       <tr>
         <td class="numeric">0x177</td>
         <td class="numeric">16</td>
-        <td>Disk Set GUID (hex) (duplicate?)</td>
+        <td>Disk Set GUID repeat (hex)</td>
       </tr>
     </table>
 
+	<h4>Private Header Flags:</h4>
+	
+	<table summary="" cellspacing="0">
+      <tr>
+		<th>Flag</th>
+		<th>Description</th>
+      </tr>
+      <tr>
+		<td>0x01</td>
+		<td>shared (the opposite is private)</td>
+      </tr>
+	  <tr>
+		<td>0x02</td>
+		<td>noautoimport</td>
+      </tr>
+    </table>
+	
+	<h4>Version Numbers:</h4>
+	
+	<table summary="" cellspacing="0">
+      <tr>
+		<th>Value</th>
+		<th>Description</th>
+      </tr>
+      <tr>
+		<td>2.11</td>
+		<td>Windows 2000 \ XP \ 2003</td>
+      </tr>
+	  <tr>
+		<td>2.12</td>
+		<td>Windows Vista \ 7 \ 2008</td>
+      </tr>
+	  <tr>
+		<td>2.12</td>
+		<td>VSFW 4.0</td>
+      </tr>
+    </table>
+	
     <h2>Notes</h2>
 
-    <p>(a) Offsets and sizes are in sectors.</p>
+    <p>
+	(a) Sum of all the bytes in the sector excluding the 4 bytes of the checksum field<br>
+	(b) Kept in sync with UpdateSequenceNumber of the most recent TOCBlock.<br>
+	</p>
 
     <p>
-    <b>N.B.</b> The final two GUIDs may be missing from the first PRIVHEAD.
+    <b>N.B.</b> The final two GUIDs may be missing from the first PRIVHEAD.<br>
+	<b>N.B.</b> The next update to the TOC will be written to the location of the previous TOCs, and then the private header will be updated to point to the updated TOC.<br>
+	<b>N.B.</b> To calculate where the previous primary TOC is located, you can use the following method:<br>
+	&nbsp;&nbsp;&nbsp;if (PrimaryTocLBA == 1)<br>
+	&nbsp;&nbsp;&nbsp;	&nbsp;&nbsp;&nbsp;return PrimaryTocLBA + 1;<br>
+	&nbsp;&nbsp;&nbsp;else<br>
+	&nbsp;&nbsp;&nbsp;	&nbsp;&nbsp;&nbsp;return PrimaryTocLBA - 1;<br>
     </p>
 
     <br>
     <a class="contact" href="../home/license.html">Copyright &copy; 2002, </a>
-    $Date: 2002/06/20 13:49:38 $
+    $Date: 2012/04/14 13:49:38 $
     <a class="contact" href="http://validator.w3.org/checklink?uri=referer">L</a>
     <a class="contact" href="http://validator.w3.org/check?uri=referer">H</a>
     <a class="contact" href="http://jigsaw.w3.org/css-validator/validator?uri=referer">C</a>
