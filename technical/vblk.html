@@ -63,7 +63,7 @@
       <tr>
         <td class="numeric">0x00</td>
         <td class="numeric">4</td>
-        <td>"VBLK" Magic Number</td>
+	<td><q>VBLK</q> Magic Number</td>
       </tr>
       <tr>
         <td class="numeric">0x04</td>
@@ -107,9 +107,9 @@
     <h3>Fragmented Records</h3>
 
     <p>
-    The number of VBLK fragments is shown in "Number of Fragments".
-    "Fragment Number" is a zero-based index.  To keep track of the record, each set
-    is given a unique "Group Number".
+    The number of VBLK fragments is shown in <q>Number of Fragments</q>.
+    <q>Fragment Number</q> is a zero-based index.  To keep track of the record, each set
+    is given a unique <q>Group Number</q>.
     </p>
 
     <p>
@@ -202,6 +202,7 @@
         <td class="numeric">1</td>
         <td>Read Policy (see below)</td>
       </tr>
+      <tr>
         <td class="numeric">..</td>
         <td class="numeric">P</td>
         <td>Volume Number (d)</td>
@@ -349,11 +350,11 @@
 
     <p>
     (a) Revision 5 of record type 1<br>
-    (b) Volume Type: "gen" or "raid5"<br>
-    (c) Volume State: "ACTIVE" or "SYNC" (for RAID 5)<br>
+    (b) Volume Type: <q>gen</q> or <q>raid5</q><br>
+    (c) Volume State: <q>ACTIVE</q> or <q>SYNC</q> (for RAID 5)<br>
     (d) Initialized as 0xFFFFFFFF, Starts at 5 and unused numbers are reused<br>
     (e) length in bytes (this does not include VBLK headers)<br>
-    (f) Disable driver letter assignment: "8000000000000000"<br>
+    (f) Disable driver letter assignment: <q>8000000000000000</q><br>
     (g) The ID of the object will be the Transaction ID that created this object<br>
     (h) Transaction ID of the last update<br>
     </p>
@@ -507,7 +508,7 @@
 
     <p>
     (a) Revision 3 of record type 2<br>
-    (b) Volume State: "ACTIVE"<br>
+    (b) Volume State: <q>ACTIVE</q><br>
     (c) The value in this field must not exceed 4 bytes (excluding length prefix)
     </p>
 
@@ -777,6 +778,7 @@
         <td class="numeric">4</td>
         <td>Disk Flags (see below)</td>
       </tr>
+      <tr>
         <td class="numeric">..</td>
         <td class="numeric">8</td>
         <td>Commit Transaction Id</td>
