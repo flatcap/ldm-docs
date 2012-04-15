@@ -18,14 +18,14 @@
       <tr>
         <td class="toolbar"><div class="toolbar"><a class="toolbar" accesskey="1" href="../index.html">Home</a></div></td>
         <td class="toolbar"><div class="toolbar"><a class="toolbar" accesskey="2" href="../overview/index.html">Overview</a></div></td>
-	<td class="toolbar"><a class="toolbar" accesskey="3" href="../technical/index.html">Technical</a></td>
+        <td class="toolbar"><a class="toolbar" accesskey="3" href="../technical/index.html">Technical</a></td>
       </tr>
     </table>
 
     <h1>PRIVHEAD - Technical</h1>
 
     <a class="prevnext" accesskey="," href="partition.html">Previous</a>
-    <a class="prevnext" accesskey="." href="tocblock.html">Next</a> 
+    <a class="prevnext" accesskey="." href="tocblock.html">Next</a>
 
     <h2>Introduction</h2>
 
@@ -52,22 +52,22 @@
       <tr>
         <td class="numeric">0x08</td>
         <td class="numeric">4</td>
-	    <td>Checksum (a)</td>
+        <td>Checksum (a)</td>
       </tr>
       <tr>
         <td class="numeric">0x0C</td>
         <td class="numeric">2</td>
-	    <td>Major Version Number (see below)</td>
+        <td>Major Version Number (see below)</td>
       </tr>
       <tr>
         <td class="numeric">0x0E</td>
         <td class="numeric">2</td>
-	    <td>Minor Version Number (see below)</td>
+        <td>Minor Version Number (see below)</td>
       </tr>
       <tr>
         <td class="numeric">0x10</td>
         <td class="numeric">8</td>
-	    <td>Timestamp of Last Update (FileTime UTC)</td>
+        <td>Timestamp of Last Update (FileTime UTC)</td>
       </tr>
       <tr>
         <td class="numeric">0x18</td>
@@ -109,7 +109,7 @@
         <td class="numeric">4</td>
         <td>Bytes Per Block (a.k.a. Sector)</td>
       </tr>
-	  <tr>
+      <tr>
         <td class="numeric">0x113</td>
         <td class="numeric">4</td>
         <td>Private Header Flags (see below)</td>
@@ -119,7 +119,7 @@
         <td class="numeric">2</td>
         <td>Public Region Slice Number</td>
       </tr>
-	  <tr>
+      <tr>
         <td class="numeric">0x119</td>
         <td class="numeric">2</td>
         <td>Private Region Slice Number</td>
@@ -191,59 +191,59 @@
       </tr>
     </table>
 
-	<h4>Private Header Flags:</h4>
-	
-	<table summary="" cellspacing="0">
+    <h4>Private Header Flags:</h4>
+
+    <table summary="" cellspacing="0">
       <tr>
-		<th>Flag</th>
-		<th>Description</th>
+        <th>Flag</th>
+        <th>Description</th>
       </tr>
       <tr>
-		<td>0x01</td>
-		<td>shared (the opposite is private)</td>
+        <td>0x01</td>
+        <td>shared (the opposite is private)</td>
       </tr>
-	  <tr>
-		<td>0x02</td>
-		<td>noautoimport</td>
+      <tr>
+        <td>0x02</td>
+        <td>noautoimport</td>
       </tr>
     </table>
-	
-	<h4>Version Numbers:</h4>
-	
-	<table summary="" cellspacing="0">
+
+    <h4>Version Numbers:</h4>
+
+    <table summary="" cellspacing="0">
       <tr>
-		<th>Value</th>
-		<th>Description</th>
+        <th>Value</th>
+        <th>Description</th>
       </tr>
       <tr>
-		<td>2.11</td>
-		<td>Windows 2000 \ XP \ 2003</td>
+        <td>2.11</td>
+        <td>Windows 2000 \ XP \ 2003</td>
       </tr>
-	  <tr>
-		<td>2.12</td>
-		<td>Windows Vista \ 7 \ 2008</td>
+      <tr>
+        <td>2.12</td>
+        <td>Windows Vista \ 7 \ 2008</td>
       </tr>
-	  <tr>
-		<td>2.12</td>
-		<td>VSFW 4.0</td>
+      <tr>
+        <td>2.12</td>
+        <td>VSFW 4.0</td>
       </tr>
     </table>
-	
+
     <h2>Notes</h2>
 
     <p>
-	(a) Sum of all the bytes in the sector excluding the 4 bytes of the checksum field<br>
-	(b) Kept in sync with UpdateSequenceNumber of the most recent TOCBlock.<br>
-	</p>
+    (a) Sum of all the bytes in the sector excluding the 4 bytes of the checksum field<br>
+    (b) Kept in sync with UpdateSequenceNumber of the most recent TOCBlock.<br>
+    </p>
 
     <p>
     <b>N.B.</b> The final two GUIDs may be missing from the first PRIVHEAD.<br>
-	<b>N.B.</b> The next update to the TOC will be written to the location of the previous TOCs, and then the private header will be updated to point to the updated TOC.<br>
-	<b>N.B.</b> To calculate where the previous primary TOC is located, you can use the following method:<br>
-	&nbsp;&nbsp;&nbsp;if (PrimaryTocLBA == 1)<br>
-	&nbsp;&nbsp;&nbsp;	&nbsp;&nbsp;&nbsp;return PrimaryTocLBA + 1;<br>
-	&nbsp;&nbsp;&nbsp;else<br>
-	&nbsp;&nbsp;&nbsp;	&nbsp;&nbsp;&nbsp;return PrimaryTocLBA - 1;<br>
+    <b>N.B.</b> The next update to the TOC will be written to the location of the previous TOCs, and then the private header will be updated to point to the updated TOC.<br>
+    <b>N.B.</b> To calculate where the previous primary TOC is located, you can use the following method:<br>
+    &nbsp;&nbsp;&nbsp;if (PrimaryTocLBA == 1)<br>
+    &nbsp;&nbsp;&nbsp;    &nbsp;&nbsp;&nbsp;return PrimaryTocLBA + 1;<br>
+    &nbsp;&nbsp;&nbsp;else<br>
+    &nbsp;&nbsp;&nbsp;    &nbsp;&nbsp;&nbsp;return PrimaryTocLBA - 1;<br>
     </p>
 
     <br>

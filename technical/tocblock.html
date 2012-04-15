@@ -18,21 +18,21 @@
       <tr>
         <td class="toolbar"><div class="toolbar"><a class="toolbar" accesskey="1" href="../index.html">Home</a></div></td>
         <td class="toolbar"><div class="toolbar"><a class="toolbar" accesskey="2" href="../overview/index.html">Overview</a></div></td>
-		<td class="toolbar"><a class="toolbar" accesskey="3" href="../technical/index.html">Technical</a></td>
+        <td class="toolbar"><a class="toolbar" accesskey="3" href="../technical/index.html">Technical</a></td>
       </tr>
     </table>
 
     <h1>TOCBLOCK - Technical</h1>
 
     <a class="prevnext" accesskey="," href="privhead.html">Previous</a>
-    <a class="prevnext" accesskey="." href="vmdb.html">Next</a> 
+    <a class="prevnext" accesskey="." href="vmdb.html">Next</a>
 
     <h2>Introduction</h2>
 
     <p>
     The TOCBLOCK is 512 bytes long.  There are two identical copies of this
     information (each has an adjacent previous copy).  One of the two contiguous pair is located at (Private Region Start LBA + 1)
-	and the other is located at (Private Region Start LBA + Size LBA - 3).
+    and the other is located at (Private Region Start LBA + Size LBA - 3).
     </p>
 
     <p>
@@ -77,22 +77,22 @@
         <td class="numeric">34</td>
         <td>TOC Region 0</td>
       </tr>
-	  <tr>
+      <tr>
         <td class="numeric">0x46</td>
         <td class="numeric">34</td>
         <td>TOC Region 1</td>
       </tr>
-	  <tr>
+      <tr>
         <td class="numeric">0x68</td>
         <td class="numeric">34</td>
         <td>...</td>
       </tr>
     </table>
-	
-	<h2>TOC Region Layout</h2>
-	
-	<table summary="" cellspacing="0">
-		<tr>
+
+    <h2>TOC Region Layout</h2>
+
+    <table summary="" cellspacing="0">
+        <tr>
         <th class="numeric">Offset</th>
         <th class="numeric">Size</th>
         <th>Description</th>
@@ -117,7 +117,7 @@
         <td class="numeric">8</td>
         <td>Region Size LBA</td>
       </tr>
-	  <tr>
+      <tr>
         <td class="numeric">0x1A</td>
         <td class="numeric">2</td>
         <td><div class="xxx">Unknown (always 00 06)</div></td>
@@ -127,46 +127,46 @@
         <td class="numeric">2</td>
         <td>Copy Number (always 00 01)</td>
       </tr>
-	  <tr>
+      <tr>
         <td class="numeric">0x1E</td>
         <td class="numeric">4</td>
         <td>Zeros</td>
       </tr>
     </table>
-	
-	<h4>Region Flags:</h4>
-	
-	<table summary="" cellspacing="0">
+
+    <h4>Region Flags:</h4>
+
+    <table summary="" cellspacing="0">
       <tr>
-		<th>Flag</th>
-		<th>Description</th>
+        <th>Flag</th>
+        <th>Description</th>
       </tr>
       <tr>
-		<td>0x01</td>
-		<td>not exist</td>
+        <td>0x01</td>
+        <td>not exist</td>
       </tr>
-	  <tr>
-		<td>0x02</td>
-		<td>new</td>
+      <tr>
+        <td>0x02</td>
+        <td>new</td>
       </tr>
-	  <tr>
-		<td>0x04</td>
-		<td>delete</td>
+      <tr>
+        <td>0x04</td>
+        <td>delete</td>
       </tr>
-	  <tr>
-		<td>0x08</td>
-		<td>disabled</td>
+      <tr>
+        <td>0x08</td>
+        <td>disabled</td>
       </tr>
     </table>
-	
-	<h2>Notes</h2>
 
-	<p>
-	(a) Sum of all the bytes in the sector excluding the 4 bytes of the checksum field<br>
+    <h2>Notes</h2>
+
+    <p>
+    (a) Sum of all the bytes in the sector excluding the 4 bytes of the checksum field<br>
     (b) The most recent TOCBlock has this value in sync with the Private Header's Update Sequence Number.<br>
-	(c) you can tell if a region is present by checking if the first byte (the first character of Name) is not null<br>
-	</p>
-	
+    (c) you can tell if a region is present by checking if the first byte (the first character of Name) is not null<br>
+    </p>
+
     <br>
     <a class="contact" href="../home/license.html">Copyright &copy; 2002, </a>
     $Date: 2012/04/14 13:49:38 $

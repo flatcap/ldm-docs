@@ -18,14 +18,14 @@
       <tr>
         <td class="toolbar"><div class="toolbar"><a class="toolbar" accesskey="1" href="../index.html">Home</a></div></td>
         <td class="toolbar"><div class="toolbar"><a class="toolbar" accesskey="2" href="../overview/index.html">Overview</a></div></td>
-		<td class="toolbar"><a class="toolbar" accesskey="3" href="../technical/index.html">Technical</a></td>
+        <td class="toolbar"><a class="toolbar" accesskey="3" href="../technical/index.html">Technical</a></td>
       </tr>
     </table>
 
     <h1>VMDB - Technical</h1>
 
     <a class="prevnext" accesskey="," href="tocblock.html">Previous</a>
-    <a class="prevnext" accesskey="." href="vblk.html">Next</a> 
+    <a class="prevnext" accesskey="." href="vblk.html">Next</a>
 
     <h2>Introduction</h2>
 
@@ -80,7 +80,7 @@
       <tr>
         <td class="numeric">0x10</td>
         <td class="numeric">2</td>
-		<td>Update Status (see below)</td>
+        <td>Update Status (see below)</td>
       </tr>
       <tr>
         <td class="numeric">0x12</td>
@@ -114,79 +114,79 @@
       </tr>
       <tr>
         <td class="numeric">0x85</td>
-	<td class="numeric">4</td>
-	<td>Number of Committed Volume VBLKs</td>
+        <td class="numeric">4</td>
+        <td>Number of Committed Volume VBLKs</td>
       </tr>
       <tr>
         <td class="numeric">0x89</td>
-	<td class="numeric">4</td>
-	<td>Number of Committed Component VBLKs</td>
+        <td class="numeric">4</td>
+        <td>Number of Committed Component VBLKs</td>
       </tr>
       <tr>
         <td class="numeric">0x8D</td>
-	<td class="numeric">4</td>
-	<td>Number of Committed Partition VBLKs</td>
+        <td class="numeric">4</td>
+        <td>Number of Committed Partition VBLKs</td>
       </tr>
       <tr>
         <td class="numeric">0x91</td>
-	<td class="numeric">4</td>
-	<td>Number of Committed Disk VBLKs</td>
+        <td class="numeric">4</td>
+        <td>Number of Committed Disk VBLKs</td>
       </tr>
       <tr>
         <td class="numeric">0x95</td>
-		<td class="numeric">4</td>
-		<td>Number of Committed Disk Access Records</td>
+        <td class="numeric">4</td>
+        <td>Number of Committed Disk Access Records</td>
       </tr>
       <tr>
         <td class="numeric">0x99</td>
-	<td class="numeric">4</td>
-	<td>(Unused)</td>
+        <td class="numeric">4</td>
+        <td>(Unused)</td>
       </tr>
       <tr>
         <td class="numeric">0x9D</td>
-	<td class="numeric">4</td>
-	<td>(Unused)</td>
+        <td class="numeric">4</td>
+        <td>(Unused)</td>
       </tr>
       <tr>
         <td class="numeric">0xA1</td>
-		<td class="numeric">4</td>
-		<td>Number of Volume Records after pending changes</td>
+        <td class="numeric">4</td>
+        <td>Number of Volume Records after pending changes</td>
       </tr>
       <tr>
         <td class="numeric">0xA5</td>
-		<td class="numeric">4</td>
-		<td>Number of Component Records after pending changes</td>
+        <td class="numeric">4</td>
+        <td>Number of Component Records after pending changes</td>
       </tr>
       <tr>
         <td class="numeric">0xA9</td>
-		<td class="numeric">4</td>
-		<td>Number of Partition Records after pending changes</td>
+        <td class="numeric">4</td>
+        <td>Number of Partition Records after pending changes</td>
       </tr>
       <tr>
         <td class="numeric">0xAD</td>
-		<td class="numeric">4</td>
-		<td>Number of Disk Records after pending changes</td>
+        <td class="numeric">4</td>
+        <td>Number of Disk Records after pending changes</td>
       </tr>
       <tr>
         <td class="numeric">0xB1</td>
-		<td class="numeric">4</td>
-		<td>Number of Disk Access Records after pending changes</td>
+        <td class="numeric">4</td>
+        <td>Number of Disk Access Records after pending changes</td>
       </tr>
       <tr>
         <td class="numeric">0xB5</td>
-		<td class="numeric">4</td>
-		<td>(Unused)</td>
+        <td class="numeric">4</td>
+        <td>(Unused)</td>
       </tr>
       <tr>
         <td class="numeric">0xB9</td>
-		<td class="numeric">4</td>
-		<td>(Unused)</td>
+        <td class="numeric">4</td>
+        <td>(Unused)</td>
       </tr>
-	  <tr>
+      <tr>
         <td class="numeric">0xBD</td>
-		<td class="numeric">16</td>
-		<td><div class="opt">Disk Set GUID? (a)</div></td>
-      </tr
+        <td class="numeric">16</td>
+        <td><div class="opt">Disk Set GUID? (a)</div></td>
+      </tr>
       <tr>
         <td class="numeric">..</td>
         <td class="numeric">8</td>
@@ -195,45 +195,45 @@
     </table>
 
     <p>
-	(a) Note: VSFW 4.0 adds this field upon installation, and removes it during unsinstall,
-	it is unclear how to detect if this field will appear or not, other than checking 0xCD to see if it's in use.<br>
-	(b) Timestamp is number of 100ns units since Jan 01 1601<br>
-	</p>
+    (a) Note: VSFW 4.0 adds this field upon installation, and removes it during unsinstall,
+    it is unclear how to detect if this field will appear or not, other than checking 0xCD to see if it's in use.<br>
+    (b) Timestamp is number of 100ns units since Jan 01 1601<br>
+    </p>
 
     <h3>Update Status</h3>
 
     <table summary="" cellspacing="0">
       <tr>
-	<th>Value</th>
-	<th>Description</th>
+        <th>Value</th>
+        <th>Description</th>
       </tr>
       <tr>
-		<td>0x01</td>
-		<td>VMDB is clean</td>
+        <td>0x01</td>
+        <td>VMDB is clean</td>
       </tr>
       <tr>
-		<td>0x02</td>
-		<td>VMDB is in a change phase</td>
+        <td>0x02</td>
+        <td>VMDB is in a change phase</td>
       </tr>
       <tr>
-		<td>0x03</td>
-		<td>VMDB is in a commit phase</td>
+        <td>0x03</td>
+        <td>VMDB is in a commit phase</td>
       </tr>
-	  <tr>
-		<td>0x04</td>
-		<td>VMDB is in an abort phase</td>
+      <tr>
+        <td>0x04</td>
+        <td>VMDB is in an abort phase</td>
       </tr>
-	  <tr>
-		<td>0x05</td>
-		<td>VMDB is new</td>
+      <tr>
+        <td>0x05</td>
+        <td>VMDB is new</td>
       </tr>
-	  <tr>
-		<td>0x06</td>
-		<td>VMDB is stale</td>
+      <tr>
+        <td>0x06</td>
+        <td>VMDB is stale</td>
       </tr>
-	  <tr>
-		<td>0x08</td>
-		<td>VMDB is offline</td>
+      <tr>
+        <td>0x08</td>
+        <td>VMDB is offline</td>
       </tr>
     </table>
 

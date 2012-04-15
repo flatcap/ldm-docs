@@ -18,14 +18,14 @@
       <tr>
         <td class="toolbar"><div class="toolbar"><a class="toolbar" accesskey="1" href="../index.html">Home</a></div></td>
         <td class="toolbar"><div class="toolbar"><a class="toolbar" accesskey="2" href="../overview/index.html">Overview</a></div></td>
-		<td class="toolbar"><a class="toolbar" accesskey="3" href="../technical/index.html">Technical</a></td>
+        <td class="toolbar"><a class="toolbar" accesskey="3" href="../technical/index.html">Technical</a></td>
       </tr>
     </table>
 
     <h1>VBLK - Technical</h1>
 
     <a class="prevnext" accesskey="," href="vmdb.html">Previous</a>
-    <a class="prevnext" accesskey="." href="klog.html">Next</a> 
+    <a class="prevnext" accesskey="." href="klog.html">Next</a>
 
     <h2>Introduction</h2>
 
@@ -39,7 +39,7 @@
     <p>
     Each VBLK is 128 bytes long and has a standard 16 byte header.  Sometimes
     the VBLK isn't large enough to store all the information, so the record will
-	be fragmented across several VBLKs (which will have the same Group Number).
+    be fragmented across several VBLKs (which will have the same Group Number).
     </p>
 
     <p>
@@ -101,14 +101,14 @@
     <p>
     The Record Type can be 0x32 (Component), 0x33 (Partition),
     0x34 / 0x44 (Disk), 0x35 / 0x45 (Disk Group) or 0x51 (Volume).
-	Note that the first 4 bits denote the revision of the record, and the last 4 denote the type.
+    Note that the first 4 bits denote the revision of the record, and the last 4 denote the type.
     </p>
 
     <h3>Fragmented Records</h3>
 
     <p>
     The number of VBLK fragments is shown in "Number of Fragments".
-	"Fragment Number" is a zero-based index.  To keep track of the record, each set
+    "Fragment Number" is a zero-based index.  To keep track of the record, each set
     is given a unique "Group Number".
     </p>
 
@@ -127,20 +127,20 @@
 
     <table summary="" cellspacing="0">
       <tr>
-		<th>Flag</th>
-		<th>Description</th>
+        <th>Flag</th>
+        <th>Description</th>
       </tr>
       <tr>
-		<td>0x00</td>
-		<td>Record is active (consistant state)</td>
+        <td>0x00</td>
+        <td>Record is active (consistant state)</td>
       </tr>
       <tr>
-		<td>0x01</td>
-		<td>Record is still active, but pending deletion</td>
+        <td>0x01</td>
+        <td>Record is still active, but pending deletion</td>
       </tr>
       <tr>
-		<td>0x02</td>
-		<td>Record is pending activation</td>
+        <td>0x02</td>
+        <td>Record is pending activation</td>
       </tr>
     </table>
 
@@ -148,123 +148,123 @@
 
     <table summary="" cellspacing="0">
       <tr>
-		<th class="numeric">Offset</th>
-		<th class="numeric">Size</th>
-		<th>Description</th>
+        <th class="numeric">Offset</th>
+        <th class="numeric">Size</th>
+        <th>Description</th>
       </tr>
       <tr>
-		<td class="numeric">0x00</td>
-		<td class="numeric">2</td>
-		<td>Update Status</td>
-      </tr>
-	  <tr>
-		<td class="numeric">0x02</td>
-		<td class="numeric">1</td>
-		<td>Record Flags (see below)</td>
+        <td class="numeric">0x00</td>
+        <td class="numeric">2</td>
+        <td>Update Status</td>
       </tr>
       <tr>
-		<td class="numeric">0x03</td>
-		<td class="numeric">1</td>
-		<td>Record type and revision (a)</td>
+        <td class="numeric">0x02</td>
+        <td class="numeric">1</td>
+        <td>Record Flags (see below)</td>
       </tr>
       <tr>
-		<td class="numeric">0x04</td>
-		<td class="numeric">4</td>
-		<td>Record length (e)</td>
+        <td class="numeric">0x03</td>
+        <td class="numeric">1</td>
+        <td>Record type and revision (a)</td>
       </tr>
       <tr>
-		<td class="numeric">0x08</td>
-		<td class="numeric">P</td>
-		<td>Object Id (g)</td>
+        <td class="numeric">0x04</td>
+        <td class="numeric">4</td>
+        <td>Record length (e)</td>
       </tr>
       <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">P</td>
-		<td>Name (string)</td>
-      </tr>
-      <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">P</td>
-		<td>Volume Type (b)</td>
-      </tr>
-      <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">P</td>
-		<td>Disable Driver Letter Assignment (string) (f)</td>
-      </tr>
-      <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">14</td>
-		<td>Volume State (string, null padded) (c)</td>
-      </tr>
-      <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">1</td>
-		<td>Read Policy (see below)</td>
-      </tr>
-		<td class="numeric">..</td>
-		<td class="numeric">P</td>
-		<td>Volume Number (d)</td>
-      </tr>
-      <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">4</td>
-		<td>Volume Flags (see below)</td>
-      </tr>
-      <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">P</td>
-		<td>Number of Children</td>
-      </tr>
-      <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">8</td>
-		<td>Commit Transaction ID (h)</td>
-      </tr>
-      <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">8</td>
-		<td><div class="xxx">Unknown Transaction ID</div></td>
-      </tr>
-      <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">P</td>
-		<td>Size LBA</td>
-      </tr>
-      <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">4</td>
-		<td>Zeros</td>
+        <td class="numeric">0x08</td>
+        <td class="numeric">P</td>
+        <td>Object Id (g)</td>
       </tr>
       <tr>
         <td class="numeric">..</td>
-		<td class="numeric">1</td>
-		<td>Partition Type, e.g. 7 = NTFS</td>
+        <td class="numeric">P</td>
+        <td>Name (string)</td>
       </tr>
       <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">16</td>
-		<td>Volume GUID</td>
+        <td class="numeric">..</td>
+        <td class="numeric">P</td>
+        <td>Volume Type (b)</td>
       </tr>
       <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">P</td>
-		<td><div class="opt">Id1?</div></td>
+        <td class="numeric">..</td>
+        <td class="numeric">P</td>
+        <td>Disable Driver Letter Assignment (string) (f)</td>
       </tr>
       <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">P</td>
-		<td><div class="opt">Id2?</div></td>
+        <td class="numeric">..</td>
+        <td class="numeric">14</td>
+        <td>Volume State (string, null padded) (c)</td>
       </tr>
       <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">P</td>
-		<td><div class="opt">Column Size LBA</div></td>
+        <td class="numeric">..</td>
+        <td class="numeric">1</td>
+        <td>Read Policy (see below)</td>
+      </tr>
+        <td class="numeric">..</td>
+        <td class="numeric">P</td>
+        <td>Volume Number (d)</td>
       </tr>
       <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">P</td>
-		<td><div class="opt">Mount Hint (string)</div></td>
+        <td class="numeric">..</td>
+        <td class="numeric">4</td>
+        <td>Volume Flags (see below)</td>
+      </tr>
+      <tr>
+        <td class="numeric">..</td>
+        <td class="numeric">P</td>
+        <td>Number of Children</td>
+      </tr>
+      <tr>
+        <td class="numeric">..</td>
+        <td class="numeric">8</td>
+        <td>Commit Transaction ID (h)</td>
+      </tr>
+      <tr>
+        <td class="numeric">..</td>
+        <td class="numeric">8</td>
+        <td><div class="xxx">Unknown Transaction ID</div></td>
+      </tr>
+      <tr>
+        <td class="numeric">..</td>
+        <td class="numeric">P</td>
+        <td>Size LBA</td>
+      </tr>
+      <tr>
+        <td class="numeric">..</td>
+        <td class="numeric">4</td>
+        <td>Zeros</td>
+      </tr>
+      <tr>
+        <td class="numeric">..</td>
+        <td class="numeric">1</td>
+        <td>Partition Type, e.g. 7 = NTFS</td>
+      </tr>
+      <tr>
+        <td class="numeric">..</td>
+        <td class="numeric">16</td>
+        <td>Volume GUID</td>
+      </tr>
+      <tr>
+        <td class="numeric">..</td>
+        <td class="numeric">P</td>
+        <td><div class="opt">Id1?</div></td>
+      </tr>
+      <tr>
+        <td class="numeric">..</td>
+        <td class="numeric">P</td>
+        <td><div class="opt">Id2?</div></td>
+      </tr>
+      <tr>
+        <td class="numeric">..</td>
+        <td class="numeric">P</td>
+        <td><div class="opt">Column Size LBA</div></td>
+      </tr>
+      <tr>
+        <td class="numeric">..</td>
+        <td class="numeric">P</td>
+        <td><div class="opt">Mount Hint (string)</div></td>
       </tr>
     </table>
 
@@ -272,90 +272,90 @@
     <p>N.B.  Id1 and Id2 are mutually exclusive.</p>
     <p>N.B.  The optional fields will always be in the order: Id, Size, Mount Hint</p>
 
-	<h4>Record Flags:</h4>
-	
+    <h4>Record Flags:</h4>
+
     <table summary="" cellspacing="0">
       <tr>
-		<th>Flag</th>
-		<th>Description</th>
+        <th>Flag</th>
+        <th>Description</th>
       </tr>
       <tr>
-		<td>0x08</td>
-		<td>Id1?</td>
+        <td>0x08</td>
+        <td>Id1?</td>
       </tr>
       <tr>
-		<td>0x20</td>
-		<td>Id2?</td>
+        <td>0x20</td>
+        <td>Id2?</td>
       </tr>
       <tr>
-		<td>0x80</td>
-		<td>Column Size</td>
+        <td>0x80</td>
+        <td>Column Size</td>
       </tr>
       <tr>
-		<td>0x02</td>
-		<td>Mount Hint</td>
+        <td>0x02</td>
+        <td>Mount Hint</td>
       </tr>
     </table>
-	
-	<h4>Volume Flags:</h4>
-	
-	<table summary="" cellspacing="0">
+
+    <h4>Volume Flags:</h4>
+
+    <table summary="" cellspacing="0">
       <tr>
-		<th>Flag</th>
-		<th>Description</th>
+        <th>Flag</th>
+        <th>Description</th>
       </tr>
       <tr>
-		<td>0x01</td>
-		<td>writeback</td>
+        <td>0x01</td>
+        <td>writeback</td>
       </tr>
       <tr>
-		<td>0x02</td>
-		<td>writecopy</td>
+        <td>0x02</td>
+        <td>writecopy</td>
       </tr>
       <tr>
-		<td>0x04</td>
-		<td>crashed</td>
+        <td>0x04</td>
+        <td>crashed</td>
       </tr>
       <tr>
-		<td>0x10</td>
-		<td><div class="xxx">Unknown (default)</div></td>
+        <td>0x10</td>
+        <td><div class="xxx">Unknown (default)</div></td>
       </tr>
     </table>
-	
-	<h4>Read Policy:</h4>
-	
-	<table summary="" cellspacing="0">
+
+    <h4>Read Policy:</h4>
+
+    <table summary="" cellspacing="0">
       <tr>
-		<th>Value</th>
-		<th>Description</th>
-      </tr>
-      <tr>
-		<td>1</td>
-		<td>Round</td>
+        <th>Value</th>
+        <th>Description</th>
       </tr>
       <tr>
-		<td>2</td>
-		<td>Prefer</td>
+        <td>1</td>
+        <td>Round</td>
       </tr>
-	  <tr>
-		<td>3</td>
-		<td>Select</td>
+      <tr>
+        <td>2</td>
+        <td>Prefer</td>
       </tr>
-	  <tr>
-		<td>4</td>
-		<td>RAID</td>
+      <tr>
+        <td>3</td>
+        <td>Select</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td>RAID</td>
       </tr>
     </table>
-	
+
     <p>
     (a) Revision 5 of record type 1<br>
     (b) Volume Type: "gen" or "raid5"<br>
     (c) Volume State: "ACTIVE" or "SYNC" (for RAID 5)<br>
     (d) Initialized as 0xFFFFFFFF, Starts at 5 and unused numbers are reused<br>
-	(e) length in bytes (this does not include VBLK headers)<br>
-	(f) Disable driver letter assignment: "8000000000000000"<br>
-	(g) The ID of the object will be the Transaction ID that created this object<br>
-	(h) Transaction ID of the last update<br>
+    (e) length in bytes (this does not include VBLK headers)<br>
+    (f) Disable driver letter assignment: "8000000000000000"<br>
+    (g) The ID of the object will be the Transaction ID that created this object<br>
+    (h) Transaction ID of the last update<br>
     </p>
 
     <h2>Component (0x32)</h2>
@@ -367,148 +367,148 @@
         <th>Description</th>
       </tr>
       <tr>
-		<td class="numeric">0x00</td>
-		<td class="numeric">2</td>
-		<td>Update Status</td>
-      </tr>
-	  <tr>
-		<td class="numeric">0x02</td>
-		<td class="numeric">1</td>
-		<td>Record Flags (see below)</td>
+        <td class="numeric">0x00</td>
+        <td class="numeric">2</td>
+        <td>Update Status</td>
       </tr>
       <tr>
-		<td class="numeric">0x03</td>
-		<td class="numeric">1</td>
-		<td>Record type and revision (a)</td>
+        <td class="numeric">0x02</td>
+        <td class="numeric">1</td>
+        <td>Record Flags (see below)</td>
       </tr>
       <tr>
-		<td class="numeric">0x04</td>
-		<td class="numeric">4</td>
-		<td>Record length</td>
+        <td class="numeric">0x03</td>
+        <td class="numeric">1</td>
+        <td>Record type and revision (a)</td>
       </tr>
       <tr>
-		<td class="numeric">0x08</td>
-		<td class="numeric">P</td>
-		<td>Object Id</td>
+        <td class="numeric">0x04</td>
+        <td class="numeric">4</td>
+        <td>Record length</td>
       </tr>
       <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">P</td>
-		<td>Name (string)</td>
+        <td class="numeric">0x08</td>
+        <td class="numeric">P</td>
+        <td>Object Id</td>
       </tr>
       <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">P</td>
-		<td>Volume State (string) (b)</td>
+        <td class="numeric">..</td>
+        <td class="numeric">P</td>
+        <td>Name (string)</td>
       </tr>
       <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">1</td>
-		<td>Partition Layout (see below)</td>
+        <td class="numeric">..</td>
+        <td class="numeric">P</td>
+        <td>Volume State (string) (b)</td>
       </tr>
       <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">4</td>
-		<td>Component Flags (see below)</td>
+        <td class="numeric">..</td>
+        <td class="numeric">1</td>
+        <td>Partition Layout (see below)</td>
       </tr>
       <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">P</td>
-		<td>Number of children</td>
+        <td class="numeric">..</td>
+        <td class="numeric">4</td>
+        <td>Component Flags (see below)</td>
       </tr>
       <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">8</td>
-		<td>Commit Transaction Id</td>
+        <td class="numeric">..</td>
+        <td class="numeric">P</td>
+        <td>Number of children</td>
       </tr>
       <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">8</td>
-		<td>Zeros</td>
+        <td class="numeric">..</td>
+        <td class="numeric">8</td>
+        <td>Commit Transaction Id</td>
       </tr>
       <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">P</td>
-		<td>Volume Id</td>
+        <td class="numeric">..</td>
+        <td class="numeric">8</td>
+        <td>Zeros</td>
       </tr>
       <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">P</td>
-		<td>Log SD (<= UInt64.Max)</td>
+        <td class="numeric">..</td>
+        <td class="numeric">P</td>
+        <td>Volume Id</td>
       </tr>
       <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">P</td>
-		<td><div class="opt">Stripe Size LBA (c)</div></td>
+        <td class="numeric">..</td>
+        <td class="numeric">P</td>
+        <td>Log SD (<= UInt64.Max)</td>
       </tr>
       <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">P</td>
-		<td><div class="opt">Number of Columns (c)</div></td>
+        <td class="numeric">..</td>
+        <td class="numeric">P</td>
+        <td><div class="opt">Stripe Size LBA (c)</div></td>
+      </tr>
+      <tr>
+        <td class="numeric">..</td>
+        <td class="numeric">P</td>
+        <td><div class="opt">Number of Columns (c)</div></td>
       </tr>
     </table>
 
     <p>The record flags denote the presence of an optional field</p>
 
-	<h4>Record Flags:</h4>
-	
+    <h4>Record Flags:</h4>
+
     <table summary="" cellspacing="0">
       <tr>
-		<th>Flag</th>
+        <th>Flag</th>
         <th>Description</th>
       </tr>
       <tr>
-	<td>0x10</td>
-	<td>Both optional fields</td>
+    <td>0x10</td>
+    <td>Both optional fields</td>
       </tr>
     </table>
-	
-	<h4>Component Flags:</h4>
-	
-	<table summary="" cellspacing="0">
+
+    <h4>Component Flags:</h4>
+
+    <table summary="" cellspacing="0">
       <tr>
-		<th>Flags</th>
-		<th>Description</th>
+        <th>Flags</th>
+        <th>Description</th>
       </tr>
       <tr>
-		<td>0x02</td>
-		<td>recover</td>
+        <td>0x02</td>
+        <td>recover</td>
       </tr>
       <tr>
-		<td>0x04</td>
-		<td>iofail</td>
+        <td>0x04</td>
+        <td>iofail</td>
       </tr>
-	  <tr>
-		<td>0x08</td>
-		<td>pending</td>
+      <tr>
+        <td>0x08</td>
+        <td>pending</td>
       </tr>
     </table>
-	
-	<h4>Partition Layout:</h4>
-	
-	<table summary="" cellspacing="0">
+
+    <h4>Partition Layout:</h4>
+
+    <table summary="" cellspacing="0">
       <tr>
-		<th>Value</th>
-		<th>Description</th>
+        <th>Value</th>
+        <th>Description</th>
       </tr>
       <tr>
-		<td>1</td>
-		<td>Stripe</td>
+        <td>1</td>
+        <td>Stripe</td>
       </tr>
       <tr>
-		<td>2</td>
-		<td>Concatenated (simple and spanned volumes)</td>
+        <td>2</td>
+        <td>Concatenated (simple and spanned volumes)</td>
       </tr>
-	  <tr>
-		<td>3</td>
-		<td>RAID 5</td>
+      <tr>
+        <td>3</td>
+        <td>RAID 5</td>
       </tr>
     </table>
 
     <p>
     (a) Revision 3 of record type 2<br>
     (b) Volume State: "ACTIVE"<br>
-	(c) The value in this field must not exceed 4 bytes (excluding length prefix)
+    (c) The value in this field must not exceed 4 bytes (excluding length prefix)
     </p>
 
     <h2>Partition (0x33)</h2>
@@ -520,196 +520,196 @@
         <th>Description</th>
       </tr>
       <tr>
-		<td class="numeric">0x00</td>
-		<td class="numeric">2</td>
-		<td>Update Status</td>
-      </tr>
-	  <tr>
-		<td class="numeric">0x02</td>
-		<td class="numeric">1</td>
-		<td>Record Flags (see below)</td>
+        <td class="numeric">0x00</td>
+        <td class="numeric">2</td>
+        <td>Update Status</td>
       </tr>
       <tr>
-		<td class="numeric">0x03</td>
-		<td class="numeric">1</td>
-		<td>Record type and revision (a)</td>
+        <td class="numeric">0x02</td>
+        <td class="numeric">1</td>
+        <td>Record Flags (see below)</td>
       </tr>
       <tr>
-		<td class="numeric">0x04</td>
-		<td class="numeric">4</td>
-		<td>Record length</td>
+        <td class="numeric">0x03</td>
+        <td class="numeric">1</td>
+        <td>Record type and revision (a)</td>
       </tr>
       <tr>
-		<td class="numeric">0x08</td>
-		<td class="numeric">P</td>
-		<td>Object Id</td>
+        <td class="numeric">0x04</td>
+        <td class="numeric">4</td>
+        <td>Record length</td>
       </tr>
       <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">P</td>
-		<td>Name (string)</td>
+        <td class="numeric">0x08</td>
+        <td class="numeric">P</td>
+        <td>Object Id</td>
       </tr>
       <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">4</td>
-		<td>Partition Flags (see below)</td>
+        <td class="numeric">..</td>
+        <td class="numeric">P</td>
+        <td>Name (string)</td>
       </tr>
       <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">8</td>
-		<td>Commit Transaction Id</td>
+        <td class="numeric">..</td>
+        <td class="numeric">4</td>
+        <td>Partition Flags (see below)</td>
       </tr>
       <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">8</td>
-		<td>Disk Offset LBA</td>
+        <td class="numeric">..</td>
+        <td class="numeric">8</td>
+        <td>Commit Transaction Id</td>
       </tr>
       <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">8</td>
-		<td>Partition Offset In Column LBA</td>
+        <td class="numeric">..</td>
+        <td class="numeric">8</td>
+        <td>Disk Offset LBA</td>
       </tr>
       <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">P</td>
-		<td>Size LBA</td>
+        <td class="numeric">..</td>
+        <td class="numeric">8</td>
+        <td>Partition Offset In Column LBA</td>
       </tr>
       <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">P</td>
-		<td>Component Id</td>
+        <td class="numeric">..</td>
+        <td class="numeric">P</td>
+        <td>Size LBA</td>
       </tr>
       <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">P</td>
-		<td>Disk Id</td>
+        <td class="numeric">..</td>
+        <td class="numeric">P</td>
+        <td>Component Id</td>
       </tr>
       <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">P</td>
-		<td><div class="opt">Column Index  (b)</div></td>
+        <td class="numeric">..</td>
+        <td class="numeric">P</td>
+        <td>Disk Id</td>
       </tr>
-	  <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">P</td>
-		<td><div class="opt">Hidden (sectors?) Count (b)</div></td>
+      <tr>
+        <td class="numeric">..</td>
+        <td class="numeric">P</td>
+        <td><div class="opt">Column Index  (b)</div></td>
+      </tr>
+      <tr>
+        <td class="numeric">..</td>
+        <td class="numeric">P</td>
+        <td><div class="opt">Hidden (sectors?) Count (b)</div></td>
       </tr>
     </table>
 
     <p>The record flags denote the presence of an optional field</p>
-	
-	<h4>Record Flags:</h4>
+
+    <h4>Record Flags:</h4>
 
     <table summary="" cellspacing="0">
       <tr>
-		<th>Flag</th>
+        <th>Flag</th>
         <th>Description</th>
       </tr>
       <tr>
-		<td>0x08</td>
-		<td>Column Index</td>
+        <td>0x08</td>
+        <td>Column Index</td>
       </tr>
-	  <tr>
-		<td>0x02</td>
-		<td>Hidden Count</td>
+      <tr>
+        <td>0x02</td>
+        <td>Hidden Count</td>
       </tr>
     </table>
 
-	<h4>Partition Flags:</h4>
-	
-	<table summary="" cellspacing="0">
+    <h4>Partition Flags:</h4>
+
+    <table summary="" cellspacing="0">
       <tr>
-		<th>Flag</th>
-		<th>Description</th>
-      </tr>
-      <tr>
-		<td>0x0008</td>
-		<td>recover</td>
+        <th>Flag</th>
+        <th>Description</th>
       </tr>
       <tr>
-		<td>0x0010</td>
-		<td>kdetach</td>
+        <td>0x0008</td>
+        <td>recover</td>
       </tr>
       <tr>
-		<td>0x0020</td>
-		<td>relocate</td>
-      </tr>
-	  <tr>
-		<td>0x0040</td>
-		<td>boot-extended</td>
-      </tr>
-	  <tr>
-		<td>0x0100</td>
-		<td>origboot</td>
+        <td>0x0010</td>
+        <td>kdetach</td>
       </tr>
       <tr>
-		<td>0x1000</td>
-		<td>volatile</td>
+        <td>0x0020</td>
+        <td>relocate</td>
+      </tr>
+      <tr>
+        <td>0x0040</td>
+        <td>boot-extended</td>
+      </tr>
+      <tr>
+        <td>0x0100</td>
+        <td>origboot</td>
+      </tr>
+      <tr>
+        <td>0x1000</td>
+        <td>volatile</td>
       </tr>
     </table>
-	
+
     <p>
     (a) Revision 3 of record type 3<br>
-	(b) The value in this field must not exceed 4 bytes (excluding length prefix)<br>
+    (b) The value in this field must not exceed 4 bytes (excluding length prefix)<br>
     </p>
 
     <h2>Disk (0x34)</h2>
 
     <table summary="" cellspacing="0">
       <tr>
-		<th class="numeric">Offset</th>
-		<th class="numeric">Size</th>
-		<th>Description</th>
+        <th class="numeric">Offset</th>
+        <th class="numeric">Size</th>
+        <th>Description</th>
       </tr>
       <tr>
-		<td class="numeric">0x00</td>
-		<td class="numeric">2</td>
-		<td>Update Status</td>
-      </tr>
-	  <tr>
-		<td class="numeric">0x02</td>
-		<td class="numeric">1</td>
-		<td>Record Flags (see below)</td>
+        <td class="numeric">0x00</td>
+        <td class="numeric">2</td>
+        <td>Update Status</td>
       </tr>
       <tr>
-		<td class="numeric">0x03</td>
-		<td class="numeric">1</td>
-		<td>Record type and revision (a)</td>
+        <td class="numeric">0x02</td>
+        <td class="numeric">1</td>
+        <td>Record Flags (see below)</td>
       </tr>
       <tr>
-		<td class="numeric">0x04</td>
-		<td class="numeric">4</td>
-		<td>Record length</td>
+        <td class="numeric">0x03</td>
+        <td class="numeric">1</td>
+        <td>Record type and revision (a)</td>
       </tr>
       <tr>
-		<td class="numeric">0x08</td>
-		<td class="numeric">P</td>
-		<td>Object Id</td>
+        <td class="numeric">0x04</td>
+        <td class="numeric">4</td>
+        <td>Record length</td>
       </tr>
       <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">P</td>
-		<td>Name (string)</td>
+        <td class="numeric">0x08</td>
+        <td class="numeric">P</td>
+        <td>Object Id</td>
       </tr>
       <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">P</td>
-		<td>Disk GUID (string)</td>
+        <td class="numeric">..</td>
+        <td class="numeric">P</td>
+        <td>Name (string)</td>
       </tr>
       <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">P</td>
-		<td>Last Device Name (string)</td>
+        <td class="numeric">..</td>
+        <td class="numeric">P</td>
+        <td>Disk GUID (string)</td>
       </tr>
       <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">4</td>
-		<td>Disk Flags (see below)</td>
+        <td class="numeric">..</td>
+        <td class="numeric">P</td>
+        <td>Last Device Name (string)</td>
       </tr>
       <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">8</td>
-		<td>Commit Tranaction Id</td>
+        <td class="numeric">..</td>
+        <td class="numeric">4</td>
+        <td>Disk Flags (see below)</td>
+      </tr>
+      <tr>
+        <td class="numeric">..</td>
+        <td class="numeric">8</td>
+        <td>Commit Tranaction Id</td>
       </tr>
     </table>
 
@@ -723,63 +723,63 @@
 
     <table summary="" cellspacing="0">
       <tr>
-		<th class="numeric">Offset</th>
-		<th class="numeric">Size</th>
-		<th>Description</th>
+        <th class="numeric">Offset</th>
+        <th class="numeric">Size</th>
+        <th>Description</th>
       </tr>
       <tr>
-		<td class="numeric">0x00</td>
-		<td class="numeric">2</td>
-		<td>Update Status</td>
-      </tr>
-	  <tr>
-		<td class="numeric">0x02</td>
-		<td class="numeric">1</td>
-		<td>Record Flags (see below)</td>
+        <td class="numeric">0x00</td>
+        <td class="numeric">2</td>
+        <td>Update Status</td>
       </tr>
       <tr>
-		<td class="numeric">0x03</td>
-		<td class="numeric">1</td>
-		<td>Record type and revision (a)</td>
+        <td class="numeric">0x02</td>
+        <td class="numeric">1</td>
+        <td>Record Flags (see below)</td>
       </tr>
       <tr>
-		<td class="numeric">0x04</td>
-		<td class="numeric">4</td>
-		<td>Record length</td>
+        <td class="numeric">0x03</td>
+        <td class="numeric">1</td>
+        <td>Record type and revision (a)</td>
       </tr>
       <tr>
-		<td class="numeric">0x08</td>
-		<td class="numeric">P</td>
-		<td>Object Id</td>
+        <td class="numeric">0x04</td>
+        <td class="numeric">4</td>
+        <td>Record length</td>
       </tr>
       <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">P</td>
-		<td>Name (string)</td>
+        <td class="numeric">0x08</td>
+        <td class="numeric">P</td>
+        <td>Object Id</td>
       </tr>
       <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">16</td>
-		<td>Disk GUID (binary)</td>
+        <td class="numeric">..</td>
+        <td class="numeric">P</td>
+        <td>Name (string)</td>
       </tr>
       <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">16</td>
-		<td>Disk Set GUID (binary)</td>
-      </tr>
-	  <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">P</td>
-		<td>Last Device Name (string)</td>
+        <td class="numeric">..</td>
+        <td class="numeric">16</td>
+        <td>Disk GUID (binary)</td>
       </tr>
       <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">4</td>
-		<td>Disk Flags (see below)</td>
+        <td class="numeric">..</td>
+        <td class="numeric">16</td>
+        <td>Disk Set GUID (binary)</td>
       </tr>
-		<td class="numeric">..</td>
-		<td class="numeric">8</td>
-		<td>Commit Transaction Id</td>
+      <tr>
+        <td class="numeric">..</td>
+        <td class="numeric">P</td>
+        <td>Last Device Name (string)</td>
+      </tr>
+      <tr>
+        <td class="numeric">..</td>
+        <td class="numeric">4</td>
+        <td>Disk Flags (see below)</td>
+      </tr>
+        <td class="numeric">..</td>
+        <td class="numeric">8</td>
+        <td>Commit Transaction Id</td>
       </tr>
     </table>
 
@@ -788,41 +788,41 @@
     <p>
     (a) Revision 4 of record type 4<br>
     </p>
-	
-	<h4>Disk Flags:</h4>
-	
-	<table summary="" cellspacing="0">
+
+    <h4>Disk Flags:</h4>
+
+    <table summary="" cellspacing="0">
       <tr>
-		<th>Flag</th>
-		<th>Description</th>
-      </tr>
-      <tr>
-		<td>0x0001</td>
-		<td>reserved</td>
+        <th>Flag</th>
+        <th>Description</th>
       </tr>
       <tr>
-		<td>0x0002</td>
-		<td>spare</td>
+        <td>0x0001</td>
+        <td>reserved</td>
       </tr>
       <tr>
-		<td>0x0004</td>
-		<td>failing</td>
-      </tr>
-	  <tr>
-		<td>0x0008</td>
-		<td>encap-pending</td>
-      </tr>
-	  <tr>
-		<td>0x0010</td>
-		<td>merge-required</td>
+        <td>0x0002</td>
+        <td>spare</td>
       </tr>
       <tr>
-		<td>0x0100</td>
-		<td>removed</td>
+        <td>0x0004</td>
+        <td>failing</td>
       </tr>
-	  <tr>
-		<td>0x0200</td>
-		<td>detached</td>
+      <tr>
+        <td>0x0008</td>
+        <td>encap-pending</td>
+      </tr>
+      <tr>
+        <td>0x0010</td>
+        <td>merge-required</td>
+      </tr>
+      <tr>
+        <td>0x0100</td>
+        <td>removed</td>
+      </tr>
+      <tr>
+        <td>0x0200</td>
+        <td>detached</td>
       </tr>
     </table>
 
@@ -832,69 +832,69 @@
 
     <table summary="" cellspacing="0">
       <tr>
-		<th class="numeric">Offset</th>
-		<th class="numeric">Size</th>
-		<th>Description</th>
+        <th class="numeric">Offset</th>
+        <th class="numeric">Size</th>
+        <th>Description</th>
       </tr>
       <tr>
-		<td class="numeric">0x00</td>
-		<td class="numeric">2</td>
-		<td>Update Status</td>
-      </tr>
-	  <tr>
-		<td class="numeric">0x02</td>
-		<td class="numeric">1</td>
-		<td>Record Flags (see below)</td>
+        <td class="numeric">0x00</td>
+        <td class="numeric">2</td>
+        <td>Update Status</td>
       </tr>
       <tr>
-		<td class="numeric">0x03</td>
-		<td class="numeric">1</td>
-		<td>Record type and revision (a)</td>
+        <td class="numeric">0x02</td>
+        <td class="numeric">1</td>
+        <td>Record Flags (see below)</td>
       </tr>
       <tr>
-		<td class="numeric">0x04</td>
-		<td class="numeric">4</td>
-		<td>Record length</td>
+        <td class="numeric">0x03</td>
+        <td class="numeric">1</td>
+        <td>Record type and revision (a)</td>
       </tr>
       <tr>
-		<td class="numeric">0x08</td>
-		<td class="numeric">P</td>
-		<td>Object Id</td>
+        <td class="numeric">0x04</td>
+        <td class="numeric">4</td>
+        <td>Record length</td>
       </tr>
       <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">P</td>
-		<td>Name (string)</td>
+        <td class="numeric">0x08</td>
+        <td class="numeric">P</td>
+        <td>Object Id</td>
       </tr>
       <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">P</td>
-		<td>Disk Group GUID (string)</td>
+        <td class="numeric">..</td>
+        <td class="numeric">P</td>
+        <td>Name (string)</td>
       </tr>
       <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">4</td>
-		<td>Zeros</td>
+        <td class="numeric">..</td>
+        <td class="numeric">P</td>
+        <td>Disk Group GUID (string)</td>
       </tr>
       <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">8</td>
-		<td>Commit Transaction Id</td>
+        <td class="numeric">..</td>
+        <td class="numeric">4</td>
+        <td>Zeros</td>
       </tr>
       <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">P</td>
-		<td><div class="opt">Number Of Config Copies (b) (c)</div></td>
+        <td class="numeric">..</td>
+        <td class="numeric">8</td>
+        <td>Commit Transaction Id</td>
       </tr>
       <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">P</td>
-		<td><div class="opt">Number Of Log Copies (b) (c)</div></td>
+        <td class="numeric">..</td>
+        <td class="numeric">P</td>
+        <td><div class="opt">Number Of Config Copies (b) (c)</div></td>
       </tr>
-	  <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">P</td>
-		<td><div class="opt">Minors Greater Than Or Equal To (b) (d)</div></td>
+      <tr>
+        <td class="numeric">..</td>
+        <td class="numeric">P</td>
+        <td><div class="opt">Number Of Log Copies (b) (c)</div></td>
+      </tr>
+      <tr>
+        <td class="numeric">..</td>
+        <td class="numeric">P</td>
+        <td><div class="opt">Minors Greater Than Or Equal To (b) (d)</div></td>
       </tr>
     </table>
 
@@ -902,98 +902,98 @@
 
     <table summary="" cellspacing="0">
       <tr>
-		<th>Flag</th>
-		<th>Description</th>
+        <th>Flag</th>
+        <th>Description</th>
       </tr>
       <tr>
-		<td>0x08</td>
-		<td>Number Of Copies</td>
+        <td>0x08</td>
+        <td>Number Of Copies</td>
       </tr>
-	  <tr>
-		<td>0x10</td>
-		<td>Number of Minors</td>
+      <tr>
+        <td>0x10</td>
+        <td>Number of Minors</td>
       </tr>
     </table>
 
     <p>
     (a) Revision 3 of record type 5<br>
-	(b) The value in this field must not exceed 4 bytes (excluding length prefix)<br>
-	(c) Special values: 0xFFFFFFFF means 'all', 0 means 'default'.<br>
-	(d) Default is 0<br>
+    (b) The value in this field must not exceed 4 bytes (excluding length prefix)<br>
+    (c) Special values: 0xFFFFFFFF means 'all', 0 means 'default'.<br>
+    (d) Default is 0<br>
     </p>
 
     <h2>Disk Group (0x45)</h2>
 
     <table summary="" cellspacing="0">
       <tr>
-		<th class="numeric">Offset</th>
-		<th class="numeric">Size</th>
-		<th>Description</th>
+        <th class="numeric">Offset</th>
+        <th class="numeric">Size</th>
+        <th>Description</th>
       </tr>
       <tr>
-		<td class="numeric">0x00</td>
-		<td class="numeric">2</td>
-		<td>Update Status</td>
-      </tr>
-	  <tr>
-		<td class="numeric">0x02</td>
-		<td class="numeric">1</td>
-		<td>Record Flags (see below)</td>
+        <td class="numeric">0x00</td>
+        <td class="numeric">2</td>
+        <td>Update Status</td>
       </tr>
       <tr>
-		<td class="numeric">0x03</td>
-		<td class="numeric">1</td>
-		<td>Record type and revision (a)</td>
+        <td class="numeric">0x02</td>
+        <td class="numeric">1</td>
+        <td>Record Flags (see below)</td>
       </tr>
       <tr>
-		<td class="numeric">0x04</td>
-		<td class="numeric">4</td>
-		<td>Record length</td>
+        <td class="numeric">0x03</td>
+        <td class="numeric">1</td>
+        <td>Record type and revision (a)</td>
       </tr>
       <tr>
-		<td class="numeric">0x08</td>
-		<td class="numeric">P</td>
-		<td>Object Id</td>
+        <td class="numeric">0x04</td>
+        <td class="numeric">4</td>
+        <td>Record length</td>
       </tr>
       <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">P</td>
-		<td>Name (string)</td>
+        <td class="numeric">0x08</td>
+        <td class="numeric">P</td>
+        <td>Object Id</td>
       </tr>
       <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">16</td>
-		<td>Disk Group GUID (binary)</td>
+        <td class="numeric">..</td>
+        <td class="numeric">P</td>
+        <td>Name (string)</td>
       </tr>
       <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">16</td>
-		<td>Disk Set GUID (binary)
+        <td class="numeric">..</td>
+        <td class="numeric">16</td>
+        <td>Disk Group GUID (binary)</td>
       </tr>
       <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">4</td>
-		<td>Zeros</td>
+        <td class="numeric">..</td>
+        <td class="numeric">16</td>
+        <td>Disk Set GUID (binary)
       </tr>
       <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">8</td>
-		<td>Commit Transaction Id</td>
+        <td class="numeric">..</td>
+        <td class="numeric">4</td>
+        <td>Zeros</td>
       </tr>
       <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">P</td>
-		<td><div class="opt">Number Of Config Copies (b)</div></td>
+        <td class="numeric">..</td>
+        <td class="numeric">8</td>
+        <td>Commit Transaction Id</td>
       </tr>
       <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">P</td>
-		<td><div class="opt">Number Of Log Copies (b)</div></td>
+        <td class="numeric">..</td>
+        <td class="numeric">P</td>
+        <td><div class="opt">Number Of Config Copies (b)</div></td>
       </tr>
-	  <tr>
-		<td class="numeric">..</td>
-		<td class="numeric">P</td>
-		<td><div class="opt">Minors Greater Than Or Equal To (b)</div></td>
+      <tr>
+        <td class="numeric">..</td>
+        <td class="numeric">P</td>
+        <td><div class="opt">Number Of Log Copies (b)</div></td>
+      </tr>
+      <tr>
+        <td class="numeric">..</td>
+        <td class="numeric">P</td>
+        <td><div class="opt">Minors Greater Than Or Equal To (b)</div></td>
       </tr>
     </table>
 
@@ -1001,22 +1001,22 @@
 
     <table summary="" cellspacing="0">
       <tr>
-		<th>Flag</th>
-		<th>Description</th>
+        <th>Flag</th>
+        <th>Description</th>
       </tr>
       <tr>
-		<td>0x08</td>
-		<td>Number Of Copies</td>
+        <td>0x08</td>
+        <td>Number Of Copies</td>
       </tr>
-	  <tr>
-		<td>0x10</td>
-		<td>Number of Minors</td>
+      <tr>
+        <td>0x10</td>
+        <td>Number of Minors</td>
       </tr>
     </table>
 
     <p>
     (a) Revision 4 of record type 5<br>
-	(b) The value in this field must not exceed 4 bytes (excluding length prefix)<br>
+    (b) The value in this field must not exceed 4 bytes (excluding length prefix)<br>
     </p>
 
     <br>
