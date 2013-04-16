@@ -45,6 +45,13 @@
     <p>
     A table size of <q>P</q> implies the field is prefixed by a one byte length
     marker.  Unless a string is listed as NULL terminated, it isn't.
+	</p>
+	<p>
+	Note to writers: there are 3 types of variable length integer fields:<br>
+	1. Variable length UInt32 (length =< 4)<br>
+	2. Variable length UInt64 (length =< 8)<br>
+	3. Padded Variable length UInt64 (length =< 4 or length = 8)<br>
+	for values not within the range of UInt32, this type must have a length prefix of 8. zeros should be added if necessary.
     </p>
 
     <h2>Standard VBLK Header</h2>
@@ -119,7 +126,7 @@
     <h3>Update Status</h3>
 
     <p>
-    To prevent data loss during updates, and changes to the VBLKs are
+    To prevent data loss during updates, changes to the VBLKs are
     logged.  In the event of a power failure, the database can be
     rolled back to a consistant state.  The table below shows what each
     VBLK Update Status means.
@@ -175,7 +182,7 @@
       <tr>
         <td class="numeric">0x08</td>
         <td class="numeric">P</td>
-        <td>Object Id (g)</td>
+        <td>Object Id (VarUInt64) (g)</td>
       </tr>
       <tr>
         <td class="numeric">..</td>
@@ -185,7 +192,7 @@
       <tr>
         <td class="numeric">..</td>
         <td class="numeric">P</td>
-        <td>Volume Type (b)</td>
+        <td>Volume Type (string) (b)</td>
       </tr>
       <tr>
         <td class="numeric">..</td>
@@ -205,7 +212,7 @@
       <tr>
         <td class="numeric">..</td>
         <td class="numeric">P</td>
-        <td>Volume Number (d)</td>
+        <td>Volume Number (VarUInt32) (d)</td>
       </tr>
       <tr>
         <td class="numeric">..</td>
@@ -215,7 +222,7 @@
       <tr>
         <td class="numeric">..</td>
         <td class="numeric">P</td>
-        <td>Number of Children</td>
+        <td>Number of Components (VarUInt32)</td>
       </tr>
       <tr>
         <td class="numeric">..</td>
@@ -230,7 +237,7 @@
       <tr>
         <td class="numeric">..</td>
         <td class="numeric">P</td>
-        <td>Size LBA</td>
+        <td>Size LBA (PaddedVarUInt64)</td>
       </tr>
       <tr>
         <td class="numeric">..</td>
@@ -240,7 +247,7 @@
       <tr>
         <td class="numeric">..</td>
         <td class="numeric">1</td>
-        <td>Partition Type, e.g. 7 = NTFS</td>
+        <td>Partition Type (see below)</td>
       </tr>
       <tr>
         <td class="numeric">..</td>
@@ -250,17 +257,17 @@
       <tr>
         <td class="numeric">..</td>
         <td class="numeric">P</td>
-        <td><div class="opt">Id1?</div></td>
+        <td><div class="opt">Id1? (VarUInt64)</div></td>
       </tr>
       <tr>
         <td class="numeric">..</td>
         <td class="numeric">P</td>
-        <td><div class="opt">Id2?</div></td>
+        <td><div class="opt">Id2? (VarUInt64)</div></td>
       </tr>
       <tr>
         <td class="numeric">..</td>
         <td class="numeric">P</td>
-        <td><div class="opt">Column Size LBA</div></td>
+        <td><div class="opt">Column Size LBA (PaddedVarUInt64)</div></td>
       </tr>
       <tr>
         <td class="numeric">..</td>
@@ -306,20 +313,56 @@
         <th>Description</th>
       </tr>
       <tr>
-        <td>0x01</td>
+        <td>0x000001</td>
         <td>writeback</td>
       </tr>
       <tr>
-        <td>0x02</td>
+        <td>0x000002</td>
         <td>writecopy</td>
       </tr>
       <tr>
-        <td>0x04</td>
+        <td>0x000004</td>
         <td>crashed</td>
       </tr>
       <tr>
-        <td>0x10</td>
+        <td>0x000010</td>
         <td><div class="xxx">Unknown (default)</div></td>
+      </tr>
+	  <tr>
+        <td>0x000100</td>
+        <td>badlog</td>
+      </tr>
+	  <tr>
+        <td>0x000400</td>
+        <td>kdetach</td>
+      </tr>
+	  <tr>
+        <td>0x000800</td>
+        <td>storage</td>
+      </tr>
+	  <tr>
+        <td>0x001000</td>
+        <td>apprecover</td>
+      </tr>
+	  <tr>
+        <td>0x002000</td>
+        <td>pending</td>
+      </tr>
+	  <tr>
+        <td>0x100000</td>
+        <td>raid-ntft</td>
+      </tr>
+	  <tr>
+        <td>0x200000</td>
+        <td>boot-volume</td>
+      </tr>
+	  <tr>
+        <td>0x400000</td>
+        <td>system-volume</td>
+      </tr>
+	  <tr>
+        <td>0x800000</td>
+        <td>retain-partition</td>
       </tr>
     </table>
 
@@ -345,6 +388,27 @@
       <tr>
         <td>4</td>
         <td>RAID</td>
+      </tr>
+    </table>
+	
+	<h4>Partition Type:</h4>
+
+    <table summary="" cellspacing="0">
+      <tr>
+        <th>Value</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <td>0x06</td>
+        <td>RAW or FAT16</td>
+      </tr>
+      <tr>
+        <td>0x07</td>
+        <td>NTFS</td>
+      </tr>
+      <tr>
+        <td>0x0B</td>
+        <td>FAT32</td>
       </tr>
     </table>
 
@@ -390,7 +454,7 @@
       <tr>
         <td class="numeric">0x08</td>
         <td class="numeric">P</td>
-        <td>Object Id</td>
+        <td>Object Id (VarUInt64)</td>
       </tr>
       <tr>
         <td class="numeric">..</td>
@@ -415,7 +479,7 @@
       <tr>
         <td class="numeric">..</td>
         <td class="numeric">P</td>
-        <td>Number of children</td>
+        <td>Number of Partitions (VarUInt32)</td>
       </tr>
       <tr>
         <td class="numeric">..</td>
@@ -430,22 +494,22 @@
       <tr>
         <td class="numeric">..</td>
         <td class="numeric">P</td>
-        <td>Volume Id</td>
+        <td>Volume Id (VarUInt64)</td>
       </tr>
       <tr>
         <td class="numeric">..</td>
         <td class="numeric">P</td>
-        <td>Log SD (<= UInt64.Max)</td>
+        <td>Log SD (VarUInt64)</td>
       </tr>
       <tr>
         <td class="numeric">..</td>
         <td class="numeric">P</td>
-        <td><div class="opt">Stripe Size LBA (c)</div></td>
+        <td><div class="opt">Stripe Size LBA (PaddedVarUInt64)</div></td>
       </tr>
       <tr>
         <td class="numeric">..</td>
         <td class="numeric">P</td>
-        <td><div class="opt">Number of Columns (c)</div></td>
+        <td><div class="opt">Number of Columns (VarUInt32)</div></td>
       </tr>
     </table>
 
@@ -509,7 +573,6 @@
     <p>
     (a) Revision 3 of record type 2<br>
     (b) Volume State: <q>ACTIVE</q><br>
-    (c) The value in this field must not exceed 4 bytes (excluding length prefix)
     </p>
 
     <h2>Partition (0x33)</h2>
@@ -543,7 +606,7 @@
       <tr>
         <td class="numeric">0x08</td>
         <td class="numeric">P</td>
-        <td>Object Id</td>
+        <td>Object Id (VarUInt64)</td>
       </tr>
       <tr>
         <td class="numeric">..</td>
@@ -573,27 +636,27 @@
       <tr>
         <td class="numeric">..</td>
         <td class="numeric">P</td>
-        <td>Size LBA</td>
+        <td>Size LBA (PaddedVarUInt64)</td>
       </tr>
       <tr>
         <td class="numeric">..</td>
         <td class="numeric">P</td>
-        <td>Component Id</td>
+        <td>Component Id (VarUInt64)</td>
       </tr>
       <tr>
         <td class="numeric">..</td>
         <td class="numeric">P</td>
-        <td>Disk Id</td>
+        <td>Disk Id (VarUInt64)</td>
       </tr>
       <tr>
         <td class="numeric">..</td>
         <td class="numeric">P</td>
-        <td><div class="opt">Column Index  (b)</div></td>
+        <td><div class="opt">Column Index (VarUInt32)</div></td>
       </tr>
       <tr>
         <td class="numeric">..</td>
         <td class="numeric">P</td>
-        <td><div class="opt">Hidden (sectors?) Count (b)</div></td>
+        <td><div class="opt">Hidden (sectors?) Count (PaddedVarUInt64)</div></td>
       </tr>
     </table>
 
@@ -651,7 +714,6 @@
 
     <p>
     (a) Revision 3 of record type 3<br>
-    (b) The value in this field must not exceed 4 bytes (excluding length prefix)<br>
     </p>
 
     <h2>Disk (0x34)</h2>
@@ -685,7 +747,7 @@
       <tr>
         <td class="numeric">0x08</td>
         <td class="numeric">P</td>
-        <td>Object Id</td>
+        <td>Object Id (VarUInt64)</td>
       </tr>
       <tr>
         <td class="numeric">..</td>
@@ -751,7 +813,7 @@
       <tr>
         <td class="numeric">0x08</td>
         <td class="numeric">P</td>
-        <td>Object Id</td>
+        <td>Object Id (VarUInt64)</td>
       </tr>
       <tr>
         <td class="numeric">..</td>
@@ -861,7 +923,7 @@
       <tr>
         <td class="numeric">0x08</td>
         <td class="numeric">P</td>
-        <td>Object Id</td>
+        <td>Object Id (VarUInt64)</td>
       </tr>
       <tr>
         <td class="numeric">..</td>
@@ -886,17 +948,17 @@
       <tr>
         <td class="numeric">..</td>
         <td class="numeric">P</td>
-        <td><div class="opt">Number Of Config Copies (b) (c)</div></td>
+        <td><div class="opt">Number Of Config Copies (VarUInt32) (b)</div></td>
       </tr>
       <tr>
         <td class="numeric">..</td>
         <td class="numeric">P</td>
-        <td><div class="opt">Number Of Log Copies (b) (c)</div></td>
+        <td><div class="opt">Number Of Log Copies (VarUInt32) (b)</div></td>
       </tr>
       <tr>
         <td class="numeric">..</td>
         <td class="numeric">P</td>
-        <td><div class="opt">Minors Greater Than Or Equal To (b) (d)</div></td>
+        <td><div class="opt">Minors Greater Than Or Equal To (VarUInt32) (c)</div></td>
       </tr>
     </table>
 
@@ -919,9 +981,8 @@
 
     <p>
     (a) Revision 3 of record type 5<br>
-    (b) The value in this field must not exceed 4 bytes (excluding length prefix)<br>
-    (c) Special values: 0xFFFFFFFF means 'all', 0 means 'default'.<br>
-    (d) Default is 0<br>
+    (b) Special values: 0xFFFFFFFF means 'all', 0 means 'default'.<br>
+    (c) Default is 0<br>
     </p>
 
     <h2>Disk Group (0x45)</h2>
@@ -955,7 +1016,7 @@
       <tr>
         <td class="numeric">0x08</td>
         <td class="numeric">P</td>
-        <td>Object Id</td>
+        <td>Object Id (VarUInt64)</td>
       </tr>
       <tr>
         <td class="numeric">..</td>
@@ -970,7 +1031,7 @@
       <tr>
         <td class="numeric">..</td>
         <td class="numeric">16</td>
-        <td>Disk Set GUID (binary)
+        <td>Last Disk Set GUID (binary)
       </tr>
       <tr>
         <td class="numeric">..</td>
@@ -985,17 +1046,17 @@
       <tr>
         <td class="numeric">..</td>
         <td class="numeric">P</td>
-        <td><div class="opt">Number Of Config Copies (b)</div></td>
+        <td><div class="opt">Number Of Config Copies (VarUInt32)</div></td>
       </tr>
       <tr>
         <td class="numeric">..</td>
         <td class="numeric">P</td>
-        <td><div class="opt">Number Of Log Copies (b)</div></td>
+        <td><div class="opt">Number Of Log Copies (VarUInt32)</div></td>
       </tr>
       <tr>
         <td class="numeric">..</td>
         <td class="numeric">P</td>
-        <td><div class="opt">Minors Greater Than Or Equal To (b)</div></td>
+        <td><div class="opt">Minors Greater Than Or Equal To (VarUInt32)</div></td>
       </tr>
     </table>
 
@@ -1018,7 +1079,6 @@
 
     <p>
     (a) Revision 4 of record type 5<br>
-    (b) The value in this field must not exceed 4 bytes (excluding length prefix)<br>
     </p>
 
     <br>
