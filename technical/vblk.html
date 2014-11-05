@@ -50,9 +50,9 @@
 
     <p>
     Note to writers: there are 3 types of variable length integer fields:<br />
-    1. Variable length UInt32 (length =< 4)<br />
-    2. Variable length UInt64 (length =< 8)<br />
-    3. Padded Variable length UInt64 (length =< 4 or length = 8)<br />
+    1. Variable length UInt32 (length &lt;= 4)<br />
+    2. Variable length UInt64 (length &lt;= 8)<br />
+    3. Padded Variable length UInt64 (length &lt;= 4 or length = 8)<br />
     for values not within the range of UInt32, this type must have a length prefix of 8. zeros should be added if necessary.
     </p>
 
@@ -657,6 +657,16 @@
       </tr>
       <tr>
         <td class="numeric">..</td>
+        <td class="numeric">8</td>
+        <td><div class="opt">Unknown Transaction ID</div></td>
+      </tr>
+      <tr>
+        <td class="numeric">..</td>
+        <td class="numeric">P</td>
+        <td><div class="opt">Unknown1 (VarUInt32)</div></td>
+      </tr>
+      <tr>
+        <td class="numeric">..</td>
         <td class="numeric">P</td>
         <td><div class="opt">Hidden (sectors?) Count (PaddedVarUInt64)</div></td>
       </tr>
@@ -674,6 +684,14 @@
       <tr>
         <td>0x08</td>
         <td>Column Index</td>
+      </tr>
+      <tr>
+        <td>0x20</td>
+        <td>Unknown Transaction ID</td>
+      </tr>
+      <tr>
+        <td>0x40</td>
+        <td>Unknown1</td>
       </tr>
       <tr>
         <td>0x02</td>
