@@ -1,15 +1,16 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name="description" content="LDM Documentation">
-    <link rel="stylesheet" type="text/css" href="../style/ldm.css">
-    <link rel="icon" href="../style/ldmicon.png" type="image/png">
-    <link rel="start" type="text/html" href="../index.html" title="LDM Documentation">
-    <link rel="next" href="index.html">
-    <link rel="previous" href="limits.html">
-    <link rel="contents" href="../index.html">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="LDM Documentation" />
+    <link rel="stylesheet" type="text/css" href="../style/ldm.css" />
+    <link rel="icon" href="../style/ldmicon.png" type="image/png" />
+    <link rel="start" type="text/html" href="../index.html" title="LDM Documentation" />
+    <link rel="next" href="index.html" />
+    <link rel="previous" href="limits.html" />
+    <link rel="contents" href="../index.html" />
     <title>Database - Overview - LDM Documentation</title>
   </head>
 
@@ -30,7 +31,7 @@
     <a name="layoutdisk"></a>
     <h2>Layout of Disk</h2>
 
-    <img src="images/part_ldm.png" width="682" height="117" alt="part_ldm">
+    <img src="images/part_ldm.png" width="682" height="117" alt="part_ldm" />
 
     <p>
     Just after the dummy partition table, there is the first LDM structure.
@@ -51,7 +52,7 @@
     <a name="layoutldm"></a>
     <h2>Layout of LDM</h2>
 
-    <img src="images/database.png" width="682" height="118" alt="database">
+    <img src="images/database.png" width="682" height="118" alt="database" />
 
     <p>
     The PRIVHEAD gives the location and size of the database.  The first
@@ -84,8 +85,8 @@
     </p>
 
     <p>
-    Striped volumes will be called Stripe1, Stripe2, etc<br>
-    RAID volumes will be called Raid1, Raid2, etc<br>
+    Striped volumes will be called Stripe1, Stripe2, etc<br />
+    RAID volumes will be called Raid1, Raid2, etc<br />
     Simple, spanned and mirrored volumes will be called Volume1, Volume2, etc
     </p>
 
@@ -108,16 +109,16 @@
     </p>
 
     <p>
-    <b>Key:</b><br>
-      <img src="images/key-v.png" width="75" height="30" alt="table key">
-      <img src="images/key-c.png" width="106" height="30" alt="table key">
-      <img src="images/key-p.png" width="79" height="30" alt="table key">
-      <img src="images/key-d.png" width="48" height="30" alt="table key">
+    <b>Key:</b><br />
+      <img src="images/key-v.png" width="75" height="30" alt="table key" />
+      <img src="images/key-c.png" width="106" height="30" alt="table key" />
+      <img src="images/key-p.png" width="79" height="30" alt="table key" />
+      <img src="images/key-d.png" width="48" height="30" alt="table key" />
     </p>
-    <br>
+    <br />
 
     <div>
-    <img class="left" src="images/layout1.png" width="25" height="210" alt="vblk layout">
+    <img class="left" src="images/layout1.png" width="25" height="210" alt="vblk layout" />
     <p>
     <b>Simple Volume</b> The easiest example is the Simple Volume.  The
     filesystem takes up exactly one partition on one disk.
@@ -129,9 +130,9 @@
     </p>
 
     </div>
-    <br class="clear">
+    <br class="clear" />
 
-    <img class="left" src="images/layout2.png" width="78" height="210" alt="vblk layout">
+    <img class="left" src="images/layout2.png" width="78" height="210" alt="vblk layout" />
     <p>
     <b>Mirrored Volume</b> This is easily identified.  The same volume information is
     sent to two components, partitions and disks.  The components don't alter
@@ -149,9 +150,9 @@
     mirror section, giving the Volume a third child.
     </p>
 
-    <br class="clear">
+    <br class="clear" />
 
-    <img class="left" src="images/layout3.png" width="77" height="210" alt="vblk layout">
+    <img class="left" src="images/layout3.png" width="77" height="210" alt="vblk layout" />
     <p>
     <b>Striped, RAID5, Spanned Volume</b> This is the most interesting layout.
     The component controls how the volume information is transformed before
@@ -182,9 +183,9 @@
     can be extended into it.  This will give the component more children.
     </p>
 
-    <br class="clear">
+    <br class="clear" />
 
-    <img class="left" src="images/layout4.png" width="179" height="210" alt="vblk layout">
+    <img class="left" src="images/layout4.png" width="179" height="210" alt="vblk layout" />
     <p>
     <b>Mirrored Stripe, Mirrored Spanned Volume</b>  This shows how different
     ideas can be combined.  The volume information is written identically to two
@@ -196,7 +197,7 @@
     require two more partitions.  Extending the volume, would require four more
     partitions.
     </p>
-    <br class="clear">
+    <br class="clear" />
 
     <!--
     <a name="klog"></a>
@@ -216,9 +217,9 @@
     </pre>
     -->
 
-    <br>
-    <a class="contact" href="http://validator.w3.org/check?uri=referer"><img src="../style/valid-html401.png" width="88" height="31" border="0" alt="Validate HTML"></a>
-    <a class="contact" href="http://jigsaw.w3.org/css-validator/check/referer"><img src="../style/valid-css.png" width="88" height="31" border="0" alt="Validate CSS"></a>
+    <br />
+    <a class="contact" href="http://validator.w3.org/check?uri=referer"><img src="../style/valid-html401.png" width="88" height="31" border="0" alt="Validate HTML" /></a>
+    <a class="contact" href="http://jigsaw.w3.org/css-validator/check/referer"><img src="../style/valid-css.png" width="88" height="31" border="0" alt="Validate CSS" /></a>
     <a class="contact" href="../home/license.html">Copyright &copy; 2001-2012</a>
   </body>
 </html>

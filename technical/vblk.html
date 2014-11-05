@@ -1,15 +1,16 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name="description" content="LDM Logical Disk Manager Documentation">
-    <link rel="stylesheet" type="text/css" href="../style/ldm.css">
-    <link rel="icon" href="../style/ldmicon.png" type="image/png">
-    <link rel="start" type="text/html" href="index.html" title="LDM Documentation">
-    <link rel="next" href="klog.html">
-    <link rel="previous" href="vmdb.html">
-    <link rel="contents" href="../index.html">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="LDM Logical Disk Manager Documentation" />
+    <link rel="stylesheet" type="text/css" href="../style/ldm.css" />
+    <link rel="icon" href="../style/ldmicon.png" type="image/png" />
+    <link rel="start" type="text/html" href="index.html" title="LDM Documentation" />
+    <link rel="next" href="klog.html" />
+    <link rel="previous" href="vmdb.html" />
+    <link rel="contents" href="../index.html" />
     <title>VBLK - Technical - LDM Documentation</title>
   </head>
 
@@ -45,13 +46,14 @@
     <p>
     A table size of <q>P</q> implies the field is prefixed by a one byte length
     marker.  Unless a string is listed as NULL terminated, it isn't.
-	</p>
-	<p>
-	Note to writers: there are 3 types of variable length integer fields:<br>
-	1. Variable length UInt32 (length =< 4)<br>
-	2. Variable length UInt64 (length =< 8)<br>
-	3. Padded Variable length UInt64 (length =< 4 or length = 8)<br>
-	for values not within the range of UInt32, this type must have a length prefix of 8. zeros should be added if necessary.
+    </p>
+
+    <p>
+    Note to writers: there are 3 types of variable length integer fields:<br />
+    1. Variable length UInt32 (length =< 4)<br />
+    2. Variable length UInt64 (length =< 8)<br />
+    3. Padded Variable length UInt64 (length =< 4 or length = 8)<br />
+    for values not within the range of UInt32, this type must have a length prefix of 8. zeros should be added if necessary.
     </p>
 
     <h2>Standard VBLK Header</h2>
@@ -70,7 +72,7 @@
       <tr>
         <td class="numeric">0x00</td>
         <td class="numeric">4</td>
-	<td><q>VBLK</q> Magic Number</td>
+        <td><q>VBLK</q> Magic Number</td>
       </tr>
       <tr>
         <td class="numeric">0x04</td>
@@ -328,39 +330,39 @@
         <td>0x000010</td>
         <td><div class="xxx">Unknown (default)</div></td>
       </tr>
-	  <tr>
+      <tr>
         <td>0x000100</td>
         <td>badlog</td>
       </tr>
-	  <tr>
+      <tr>
         <td>0x000400</td>
         <td>kdetach</td>
       </tr>
-	  <tr>
+      <tr>
         <td>0x000800</td>
         <td>storage</td>
       </tr>
-	  <tr>
+      <tr>
         <td>0x001000</td>
         <td>apprecover</td>
       </tr>
-	  <tr>
+      <tr>
         <td>0x002000</td>
         <td>pending</td>
       </tr>
-	  <tr>
+      <tr>
         <td>0x100000</td>
         <td>raid-ntft</td>
       </tr>
-	  <tr>
+      <tr>
         <td>0x200000</td>
         <td>boot-volume</td>
       </tr>
-	  <tr>
+      <tr>
         <td>0x400000</td>
         <td>system-volume</td>
       </tr>
-	  <tr>
+      <tr>
         <td>0x800000</td>
         <td>retain-partition</td>
       </tr>
@@ -390,8 +392,8 @@
         <td>RAID</td>
       </tr>
     </table>
-	
-	<h4>Partition Type:</h4>
+
+    <h4>Partition Type:</h4>
 
     <table summary="" cellspacing="0">
       <tr>
@@ -413,14 +415,14 @@
     </table>
 
     <p>
-    (a) Revision 5 of record type 1<br>
-    (b) Volume Type: <q>gen</q> or <q>raid5</q><br>
-    (c) Volume State: <q>ACTIVE</q> or <q>SYNC</q> (for RAID 5)<br>
-    (d) Initialized as 0xFFFFFFFF, Starts at 5 and unused numbers are reused<br>
-    (e) length in bytes (this does not include VBLK headers)<br>
-    (f) Disable driver letter assignment: <q>8000000000000000</q><br>
-    (g) The ID of the object will be the Transaction ID that created this object<br>
-    (h) Transaction ID of the last update<br>
+    (a) Revision 5 of record type 1<br />
+    (b) Volume Type: <q>gen</q> or <q>raid5</q><br />
+    (c) Volume State: <q>ACTIVE</q> or <q>SYNC</q> (for RAID 5)<br />
+    (d) Initialized as 0xFFFFFFFF, Starts at 5 and unused numbers are reused<br />
+    (e) length in bytes (this does not include VBLK headers)<br />
+    (f) Disable driver letter assignment: <q>8000000000000000</q><br />
+    (g) The ID of the object will be the Transaction ID that created this object<br />
+    (h) Transaction ID of the last update<br />
     </p>
 
     <h2>Component (0x32)</h2>
@@ -571,8 +573,8 @@
     </table>
 
     <p>
-    (a) Revision 3 of record type 2<br>
-    (b) Volume State: <q>ACTIVE</q><br>
+    (a) Revision 3 of record type 2<br />
+    (b) Volume State: <q>ACTIVE</q><br />
     </p>
 
     <h2>Partition (0x33)</h2>
@@ -713,7 +715,7 @@
     </table>
 
     <p>
-    (a) Revision 3 of record type 3<br>
+    (a) Revision 3 of record type 3<br />
     </p>
 
     <h2>Disk (0x34)</h2>
@@ -779,7 +781,7 @@
     <p>N.B. This record type doesn't have any flags</p>
 
     <p>
-    (a) Revision 3 of record type 4<br>
+    (a) Revision 3 of record type 4<br />
     </p>
 
     <h2>Disk (0x44)</h2>
@@ -850,7 +852,7 @@
     <p>N.B. This record type doesn't have any flags</p>
 
     <p>
-    (a) Revision 4 of record type 4<br>
+    (a) Revision 4 of record type 4<br />
     </p>
 
     <h4>Disk Flags:</h4>
@@ -980,9 +982,9 @@
     </table>
 
     <p>
-    (a) Revision 3 of record type 5<br>
-    (b) Special values: 0xFFFFFFFF means 'all', 0 means 'default'.<br>
-    (c) Default is 0<br>
+    (a) Revision 3 of record type 5<br />
+    (b) Special values: 0xFFFFFFFF means 'all', 0 means 'default'.<br />
+    (c) Default is 0<br />
     </p>
 
     <h2>Disk Group (0x45)</h2>
@@ -1078,12 +1080,12 @@
     </table>
 
     <p>
-    (a) Revision 4 of record type 5<br>
+    (a) Revision 4 of record type 5<br />
     </p>
 
-    <br>
-    <a class="contact" href="http://validator.w3.org/check?uri=referer"><img src="../style/valid-html401.png" width="88" height="31" border="0" alt="Validate HTML"></a>
-    <a class="contact" href="http://jigsaw.w3.org/css-validator/check/referer"><img src="../style/valid-css.png" width="88" height="31" border="0" alt="Validate CSS"></a>
+    <br />
+    <a class="contact" href="http://validator.w3.org/check?uri=referer"><img src="../style/valid-html401.png" width="88" height="31" border="0" alt="Validate HTML" /></a>
+    <a class="contact" href="http://jigsaw.w3.org/css-validator/check/referer"><img src="../style/valid-css.png" width="88" height="31" border="0" alt="Validate CSS" /></a>
     <a class="contact" href="../home/license.html">Copyright &copy; 2001-2012</a>
   </body>
 </html>
