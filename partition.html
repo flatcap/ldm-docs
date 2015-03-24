@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- http://linux-ntfs.sourceforge.net/ldm/partition.html -->
+
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta name="description" content="LDM Logical Disk Manager Documentation">
+    <link rel="stylesheet" type="text/css" href="ldm.css">
+    <link rel="start" type="text/html" href="index.html" title="LDM Documentation">
+    <title>Partition - LDM Documentation</title>
+  </head>
+
+  <body>
+    <table border="1" class="toolbar" summary="" cellspacing="0">
+      <tr>
+        <td class="toolbar"><a accesskey="1" class="toolbar" href="index.html">Home</a></td>
+        <td class="toolbar">&nbsp;</td>
+        <td class="toolbar"><a accesskey="2" class="toolbar" href="partition.html">Part</a></td>
+        <td class="toolbar">&nbsp;</td>
+        <td class="toolbar"><a accesskey="3" class="toolbar" href="privhead.html">Priv</a></td>
+        <td class="toolbar">&nbsp;</td>
+        <td class="toolbar"><a accesskey="4" class="toolbar" href="tocblock.html">TOC</a></td>
+        <td class="toolbar">&nbsp;</td>
+        <td class="toolbar"><a accesskey="5" class="toolbar" href="vmdb.html">VMDB</a></td>
+        <td class="toolbar">&nbsp;</td>
+        <td class="toolbar"><a accesskey="6" class="toolbar" href="vblk.html">VBLK</a></td>
+        <td class="toolbar">&nbsp;</td>
+        <td class="toolbar"><a accesskey="7" class="toolbar" href="klog.html">KLOG</a></td>
+      </tr>
+    </table>
+
+    <h1>Partition - LDM Documentation</h1>
+
+    <h2>Overview</h2>
+
+    <p>
+    As always, each physical disk must have a partition table.
+    </p>
+
+    <h2>Layout</h2>
+
+    <table border="1" summary="" cellspacing="0">
+      <tr>
+	<th>Device</th>
+	<th class="numeric">Start</th>
+	<th class="numeric">End</th>
+	<th class="numeric">Blocks</th>
+	<th class="numeric">Id</th>
+	<th>System</th>
+      </tr>
+      <tr>
+	<td>/dev/hda</td>
+	<td class="numeric">1</td>
+	<td class="numeric">1037</td>
+	<td class="numeric">2090560</td>
+	<td class="numeric">42</td>
+	<td>SFS</td>
+      </tr>
+      <tr>
+	<td>&nbsp;</td>
+	<td class="numeric">&nbsp;</td>
+	<td class="numeric">&nbsp;</td>
+	<td class="numeric">&nbsp;</td>
+	<td class="numeric">&nbsp;</td>
+	<td>&nbsp;</td>
+      </tr>
+      <tr>
+	<td>&nbsp;</td>
+	<td class="numeric">&nbsp;</td>
+	<td class="numeric">&nbsp;</td>
+	<td class="numeric">&nbsp;</td>
+	<td class="numeric">&nbsp;</td>
+	<td>&nbsp;</td>
+      </tr>
+      <tr>
+	<td>&nbsp;</td>
+	<td class="numeric">&nbsp;</td>
+	<td class="numeric">&nbsp;</td>
+	<td class="numeric">&nbsp;</td>
+	<td class="numeric">&nbsp;</td>
+	<td>&nbsp;</td>
+      </tr>
+    </table>
+
+    <h2>Notes</h2>
+
+    <p>
+    Since the LDM can manage hundreds of partitions, it doesn't make
+    any sense to have more than one <b>real</b> partition.
+    </p>
+
+    <p>
+    If LDM is in use, there will be exactly one partition, which
+    will be the size of the whole disk.
+    </p>
+
+    <p>
+    The type of the partition is 0x42.
+    This Id used to be used for an encrypted <q>Secure FileSystem</q>.
+    Microsoft have reused the Id for themselves.
+    </p>
+
+    <br>
+    <!-- The two validators will only work if this page is visible on the web -->
+    <a class="contact" href="http://validator.w3.org/check/referer">Validate HTML</a>
+    <a class="contact" href="http://jigsaw.w3.org/css-validator/check/referer">Validate CSS</a>
+    <a class="contact" href="mailto:webmaster@flatcap.org">
+    $Id: partition.html,v 1.1 2001/05/30 20:25:10 flatcap Exp $
+    </a>
+  </body>
+</html>
+
+

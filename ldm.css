@@ -1,0 +1,116 @@
+body {
+  margin: 10px 32px 10px 32px;
+  font-family: sans-serif;
+  color: #000;
+  background-color: #ffc;
+  /* width: 570px; */
+}
+
+/*----------------------------------------*/
+
+a:link {
+  color: #000; background-color: transparent; text-decoration: none;
+}
+
+a:visited {
+  color: #000; background-color: transparent; text-decoration: none;
+}
+
+a:active {
+  color: #000; background-color: transparent; text-decoration: underline;
+}
+
+a:hover {
+  color: #00f; background-color: transparent; text-decoration: underline;
+}
+
+a.visible {
+  text-decoration: underline;
+}
+
+a.toolbar {
+  font: 150% bold;
+  color: #069;
+  background: #cc9;
+  text-align: center;
+  padding: 2px 10px 2px 10px;
+  text-decoration: none;
+}
+
+a.contact {
+  font: 75% normal;
+  color: #cc9;
+  background-color: transparent;
+}
+
+/*----------------------------------------*/
+
+h1, h2, h3, a.heading {
+  text-align: left;
+  color: #069;
+  background-color: transparent;
+}
+
+h1 {
+  font: 150% sans-serif;
+}
+
+h2 {
+  font: 120% sans-serif;
+}
+
+h3 {
+  font: 100% sans-serif;
+}
+
+/*----------------------------------------*/
+
+table, th, td {
+  text-align: left;
+}
+
+td.numeric, th.numeric, a.numeric {
+  text-align: right;
+}
+
+th, td {
+  padding-left: 5px;
+  padding-right: 5px;
+  border-right: solid #999 0px;
+  border-bottom: solid #999 0px;
+}
+
+table.toolbar, td.toolbar {
+  border: none;
+  padding: 0px;
+  color: inherit;
+  background-color: #ffc;
+}
+
+table {
+  border-top: solid #999 0px;
+  border-left: solid #999 0px;
+  color: inherit;
+  background-color: #ffd;
+}
+
+/*----------------------------------------*/
+
+dt {
+  padding-top: 0.5em;
+  font-weight: bold;
+}
+
+p, dd {
+  text-align: justify;
+}
+
+/*----------------------------------------*/
+
+/*
+div.uncertain, td.uncertain {
+  margin-left: -4px;
+  border-left: red solid 2px;
+  padding-left: 3px;
+}
+*/
