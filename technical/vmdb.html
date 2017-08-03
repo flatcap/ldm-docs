@@ -34,6 +34,9 @@
     Database.  The VMDB and KLOG blocks manage the journalling of the
     database metadata.
     </p>
+    <p>
+    The first VBLK block will follow immediately after the VMDB block (4Kn: the first VBLK block will reside in the same sector as the VMDB).
+    </p>
 
     <h3>Update Status</h3>
 

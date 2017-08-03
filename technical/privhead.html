@@ -238,12 +238,9 @@
 
     <p>
     <b>N.B.</b> The final two GUIDs may be missing from the first PRIVHEAD.<br />
-    <b>N.B.</b> The next update to the TOC will be written to the location of the previous TOCs, and then the private header will be updated to point to the updated TOC.<br />
-    <b>N.B.</b> To calculate where the previous primary TOC is located, you can use the following method:<br />
-    &nbsp;&nbsp;&nbsp;if (PrimaryTocLBA == 1)<br />
-    &nbsp;&nbsp;&nbsp;    &nbsp;&nbsp;&nbsp;return PrimaryTocLBA + 1;<br />
-    &nbsp;&nbsp;&nbsp;else<br />
-    &nbsp;&nbsp;&nbsp;    &nbsp;&nbsp;&nbsp;return PrimaryTocLBA - 1;<br />
+    <b>N.B.</b> The next update to the primary / secondary TOCs will be written
+    to a different locations, and then the private header will be updated to
+    point to the updated TOCs.
     </p>
 
     <br />
